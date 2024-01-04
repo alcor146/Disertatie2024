@@ -1,0 +1,21 @@
+{
+  "name": "truffle",
+  "version": "1.0.0",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "truffle": "^5.11.5"
+  },
+  "devDependencies": {
+    "mocha": "^10.1.0"
+  },
+  "description": ""
+}

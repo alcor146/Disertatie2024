@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="data.xsd" elementFormDefault="qualified">
+    <xs:element name="rentals">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="rental" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="clientInformation" minOccurs="1" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                        <xs:element name="SSN" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                        <xs:element name="securitySeries" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                        <xs:element name="securityNumber" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                        <xs:element name="phoneNumber" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="rentalDetails" minOccurs="1" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="date" type="xs:date" minOccurs="1" maxOccurs="1"></xs:element>
+                                        <xs:element name="numberOfHours" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                        <xs:element name="bikeDetails" minOccurs="1" maxOccurs="1">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="bykeType" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                                    <xs:element name="numberOfBykes" type="xs:string" minOccurs="1" maxOccurs="1"></xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:integer"></xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

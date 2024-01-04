@@ -1,0 +1,1 @@
+./go-ethereum/build/bin/bootnode --genkey boot.key

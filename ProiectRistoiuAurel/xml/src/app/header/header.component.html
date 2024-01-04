@@ -1,0 +1,14 @@
+<mat-toolbar id="toolbar" class="header">
+    <button mat-button [routerLink]="['/clients']"  routerLinkActive="active">Rentals_xml</button> 
+    <button mat-button [routerLink]="['/rentals']"  routerLinkActive="active">Rentals_json</button>
+    <button mat-button [routerLink]="['/upload']"  routerLinkActive="active">Upload</button>
+</mat-toolbar>
+
+<!-- rute catre componentele respective
+In ordine:
+-pagina ce afiseaza continutul fisierului xml
+-pagina ce afiseaza continutul fisierului json
+-pagina de upload si lista fisierelor incarcate din aplicatie
+se apasa pe numele fisierului dorit pentru a vedea continutul. In cazul asta fisierul xml cu cu stilizarea oferita de fisierul xsl
+ -->
+

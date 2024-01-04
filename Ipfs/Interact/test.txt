@@ -1,0 +1,30 @@
+
+eth.sendTransaction({to: '0x1d17e21863decf50d41460b7c6a7194374e4dc8c',from: eth.accounts[0],value: 80000});
+eth.sendTransaction({to: '0x626f170dc23145e90517da146abf3e26a2b70e52',from: eth.accounts[0],value: 80000});
+
+==========================================================================
+
+ geth --datadir nodes/bootnode --networkid 2002 --port 30304 --authrpc.port 8555 --http.corsdomain '*'
+ geth --datadir nodes/node1 --networkid 12345 --http --http.port 30306 --authrpc.port 8555 --http.api 'web3,eth,net,miner,personal' --allow-insecure-unlock --unlock 0xf841855e5b4ba385bb03e83f1ec2949c523d648f --mine --miner.threads=1 --miner.etherbase=f841855e5b4ba385bb03e83f1ec2949c523d648f
+ geth --datadir nodes/node2 --networkid 12345 --http --port 30307 --authrpc.port 8552 --http.api 'web3,eth,net,miner,personal' --allow-insecure-unlock --unlock 0x1d17e21863decf50d41460b7c6a7194374e4dc8c --mine --miner.threads=1 --miner.etherbase=1d17e21863decf50d41460b7c6a7194374e4dc8c --keystore nodes/node2/keystore
+
+--nat extip:127.0.0.1
+
+ geth --datadir nodes/node2 --networkid 2002 --http --port 8777 --authrpc.port 8778 --http.api 'web3,eth,net,miner,personal' --unlock 0x1d17e21863decf50d41460b7c6a7194374e4dc8c --mine --miner.threads=1 --miner.etherbase=1d17e21863decf50d41460b7c6a7194374e4dc8c  --allow-insecure-unlock
+--bootnodes enode://1afb8eaf2bdf7f0a7b352eb336d0ae4aa604b525b2db90f8f6d9bc223372aa9bedd959040c2cc6ec9a55464aed0a094cbe3140c1c17d6cb4d5415d5fc8697b71@127.0.0.1:30309
+
+
+geth --datadir nodes/ethnode0 --networkid 4785 --http --http.api 'web3,eth,net,miner,personal' --allow-insecure-unlock --unlock 0x387d234a6990332d79e198ea215504a8e910360b --mine --miner.etherbase=0x387d234a6990332d79e198ea215504a8e910360b
+geth --datadir nodes/ethnode1 --networkid 4785 --http --http.port 30306 --authrpc.port 8553 --http.api 'web3,eth,net,miner,personal' --allow-insecure-unlock --unlock 0xea17e8fe6f6355065645dfe3f4e4cd55bf987202 --mine --miner.threads=1 --miner.etherbase=0xea17e8fe6f6355065645dfe3f4e4cd55bf987202
+geth --datadir nodes/ethnode2 --networkid 4785 --http --port 30307 --authrpc.port 8554 --http.api 'web3,eth,net,miner,personal' --allow-insecure-unlock --unlock 0xf06fa2b53782d8b585b8c96e9f72379deefd80b2 --mine --miner.threads=1 --miner.etherbase=0xf06fa2b53782d8b585b8c96e9f72379deefd80b2 --keystore nodes/node2/keystore
+
+
+geth --datadir nodes/eth1 --http --http.port 8555 --port 30306 --authrpc.port 8554 --networkid 12345 --unlock 0x114aaa799ddac4339b6a168de5ad7dbcd025b934 --allow-insecure-unlock  --mine --miner.threads=1 --miner.etherbase=0x114aaa799ddac4339b6a168de5ad7dbcd025b934 --nodiscover
+geth --datadir nodes/eth2 --port 30307 --authrpc.port 8555 --networkid 12345 --unlock 0x497946f42cc9c06cedbcb788b12c5f2f8736c4aa --mine --miner.threads=1 --miner.etherbase=0x497946f42cc9c06cedbcb788b12c5f2f8736c4aa
+
+172.20.209.165
+
+IPFS_PATH=config1.json ipfs init --repo-dir node1
+sudo IPFS_PATH=config ipfs daemon --repo-dir node3
+
+    console.log(shares)

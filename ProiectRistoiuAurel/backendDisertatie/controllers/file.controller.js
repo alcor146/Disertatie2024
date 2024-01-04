@@ -1,6 +1,6 @@
 const uploadFile = require("../middleware/upload");
 var fs = require("fs")
-const baseUrl = "http://localhost:3001/api/files/";
+const baseUrl = "http://localhost:3001/api/files";
 
 exports.upload = async (req, res) => {
   try {
@@ -20,7 +20,6 @@ exports.upload = async (req, res) => {
   }
 };
 exports.getListFiles = (req, res) => {
-    console.log("/files")
   const directoryPath = "resources/";
   console.log(directoryPath)
   fs.readdir(directoryPath, function (err, files) {

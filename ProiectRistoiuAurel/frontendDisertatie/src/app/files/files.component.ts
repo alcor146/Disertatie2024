@@ -8,11 +8,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class FilesComponent {
   records: any = []
-  xmlData: any = []
-  page: any;
-  count:number = 0;
-  tableSize:number = 7;
-  tableSizes:Array<number> = [3, 6, 9, 12];
+
 
 
   constructor(private http: HttpClient) { }
@@ -44,14 +40,5 @@ export class FilesComponent {
    
   }
 
-  onTableDataChange(event: any){
-    this.page = event;
-    this.getClients();
-  }  
 
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
-    this.page = 1;
-    this.getClients();
-  }  
 }

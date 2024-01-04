@@ -15,13 +15,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatInputModule} from '@angular/material/input';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSortModule} from '@angular/material/sort';
-import {NgxPaginationModule} from 'ngx-pagination';
 import {MatIconModule} from '@angular/material/icon';
 import {FileUploadComponent } from './file-upload/file-upload.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {NgxPaginationModule } from 'ngx-pagination';
 
 
 @NgModule({
@@ -38,19 +38,18 @@ import {FileUploadComponent } from './file-upload/file-upload.component';
     FormsModule,
     NgbModule,  
     BrowserAnimationsModule,
-    NgxPaginationModule,
     MatButtonModule,
     MatIconModule,
     MatInputModule,
     MatToolbarModule,
+    MatPaginatorModule,
+    NgxPaginationModule
   ],
   exports: [
     MatTableModule,
     MatSortModule,
     MatProgressSpinnerModule,
     MatInputModule,
-    MatPaginatorModule,
-    NgxPaginationModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

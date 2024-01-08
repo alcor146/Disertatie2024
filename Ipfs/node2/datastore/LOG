@@ -85,3 +85,13 @@
 12:32:39.467570 db@open done T·14.3131ms
 21:25:15.704643 db@close closing
 21:25:15.705292 db@close done T·603.2µs
+=============== Jan 8, 2024 (EET) ===============
+19:52:20.719727 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:52:20.721396 version@stat F·[2 1] S·115KiB[104KiB 10KiB] Sc·[0.50 0.00]
+19:52:20.721486 db@open opening
+19:52:20.721584 journal@recovery F·1
+19:52:20.721803 journal@recovery recovering @19
+19:52:20.726664 memdb@flush created L0@21 N·313 S·55KiB "/F5..BCI,v720":"/pr..YIS,v756"
+19:52:20.727337 version@stat F·[3 1] S·171KiB[160KiB 10KiB] Sc·[0.75 0.00]
+19:52:20.740144 db@janitor F·6 G·0
+19:52:20.740228 db@open done T·18.723804ms

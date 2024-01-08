@@ -11,7 +11,7 @@ router.route("/clients/deleteClient/:id").post(deleteClient)
 
 router.route("/upload").post(upload)
 router.route("/files").get(getListFiles)
-router.route("/files/:name").get(download)
+router.route("/documents/:name").get(download)
 
 router.route("/rentals/getRentals").get(rentals)
 

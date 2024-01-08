@@ -24,7 +24,7 @@ geth --datadir nodes/eth2 --port 30307 --authrpc.port 8555 --networkid 12345 --u
 
 172.20.209.165
 
-IPFS_PATH=config1.json ipfs init --repo-dir node1
+IPFS_PATH=config1.json ipfs init --repo-dir node3
 sudo IPFS_PATH=config ipfs daemon --repo-dir node3
 
-    console.log(shares)
+console.log(shares)

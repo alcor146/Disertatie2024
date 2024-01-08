@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { HttpEventType, HttpResponse, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/services/file-upload.service';
+import {saveAs} from "file-saver";
 
 
 @Component({
@@ -15,10 +16,10 @@ export class FileUploadComponent implements OnInit  {
   currentFile?: File;
   progress = 0;
   message = '';
-
+  private baseUrl = 'http://localhost:3001/api';
   fileInfos?: Observable<any>;
 
-  constructor(private uploadService: FileUploadService) { }
+  constructor(private uploadService: FileUploadService, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.fileInfos = this.uploadService.getFiles();
@@ -26,6 +27,15 @@ export class FileUploadComponent implements OnInit  {
 
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
+  }
+
+  download(record: any) {
+    console.log(`da1`)
+    this.http.get(`${this.baseUrl}/documents/${record.name}`,  { responseType: "blob" })
+      .subscribe((blob ) => {
+        console.log(`${this.baseUrl}/documents/${record.name}`)
+        saveAs(blob, record.name);
+      })
   }
 
   upload(): void {
@@ -44,6 +54,7 @@ export class FileUploadComponent implements OnInit  {
             } else if (event instanceof HttpResponse) {
               this.message = event.body.message;
               this.fileInfos = this.uploadService.getFiles();
+              this.ngOnInit()
             }
           },
           error: (err: any) => {

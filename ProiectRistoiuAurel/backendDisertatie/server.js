@@ -12,9 +12,9 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/api/files', express.static(path.join(__dirname, 'resources')))
-
+app.use('/api/files', express.static(path.join(__dirname, 'resources')));
 app.use('/api', require('./routes/clients'));
+
 
 const server = app.listen( PORT, () => {
     console.log(`App microservice listening on port ${PORT}`);

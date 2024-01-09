@@ -27,6 +27,7 @@ export class FileUploadComponent implements OnInit  {
 
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
+    this.upload();
   }
 
   download(record: any) {

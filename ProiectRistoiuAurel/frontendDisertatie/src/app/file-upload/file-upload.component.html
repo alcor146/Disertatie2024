@@ -34,7 +34,7 @@
           </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let file of fileInfos | async">
+        <tr *ngFor="let file of fileInfos">
           <td>{{ file.name }}</td>
           <td>
             <button class="button" mat-raised-button color="warn" (click)="download(file)">Download</button>

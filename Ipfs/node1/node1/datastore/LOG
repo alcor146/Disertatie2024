@@ -16,3 +16,5 @@
 20:26:13.220417 version@stat F·[1] S·981B[981B] Sc·[0.25]
 20:26:13.233794 db@janitor F·3 G·0
 20:26:13.233853 db@open done T·17.4798ms
+22:42:22.410153 db@close closing
+22:42:22.419416 db@close done T·2.3648ms

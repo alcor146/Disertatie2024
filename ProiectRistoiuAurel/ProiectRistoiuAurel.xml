@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rentals SYSTEM "ProiectRistoiuAurel.dtd">
+<?xml-stylesheet type="text/xsl" href="ProiectRistoiuAurel.xsl"?>
+<rentals>
+  <rental id="1">
+    <clientInformation>
+      <name>Ristoiu Aurel</name>
+      <SSN>11111111111111</SSN>
+      <securitySeries>DD</securitySeries>
+      <securityNumber>190823</securityNumber>
+      <phoneNumber>019269301239</phoneNumber>
+    </clientInformation>
+    <rentalDetails>
+      <date>10-04-2021</date>
+      <numberOfHours>2</numberOfHours>
+      <bikeDetails>
+        <bykeType>Road Bike</bykeType>
+        <numberOfBykes>2</numberOfBykes>
+      </bikeDetails>
+    </rentalDetails>
+  </rental>
+  <rental id="2">
+    <clientInformation>
+      <name>Colonelul</name>
+      <SSN>2222222222222</SSN>
+      <securitySeries>DD</securitySeries>
+      <securityNumber>23424</securityNumber>
+      <phoneNumber>343452334</phoneNumber>
+    </clientInformation>
+    <rentalDetails>
+      <date>10-04-2020</date>
+      <numberOfHours>4</numberOfHours>
+      <bikeDetails>
+        <bykeType>Mountain Bike</bykeType>
+        <numberOfBykes>3</numberOfBykes>
+      </bikeDetails>
+    </rentalDetails>
+  </rental>
+  <rental id="3">
+    <clientInformation>
+      <name>Cartof</name>
+      <SSN>33333333333333</SSN>
+      <securitySeries>DD</securitySeries>
+      <securityNumber>190823</securityNumber>
+      <phoneNumber>234234324</phoneNumber>
+    </clientInformation>
+    <rentalDetails>
+      <date>10-08-2021</date>
+      <numberOfHours>5</numberOfHours>
+      <bikeDetails>
+        <bykeType>Touring Bike</bykeType>
+        <numberOfBykes>1</numberOfBykes>
+      </bikeDetails>
+    </rentalDetails>
+  </rental>
+</rentals>

@@ -17,13 +17,25 @@ export class FileUploadComponent implements OnInit  {
   progress = 0;
   message = '';
   private baseUrl = 'http://localhost:3001/api';
-  fileInfos?: Observable<any>;
+  fileInfos: any[] = [];
 
   constructor(private uploadService: FileUploadService, private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.fileInfos = this.uploadService.getFiles();
+    this.showFiles()
   }
+
+  showFiles(){
+
+    this.http.get('http://localhost:3001/api/files')
+      .subscribe((res: any) => {
+        console.log("res: ", res)
+        let jsonString = JSON.stringify(res);
+        let jsonDB = JSON.parse(jsonString);
+        this.fileInfos = res.data;
+        console.log(this.fileInfos)
+      })
+}
 
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
@@ -54,7 +66,7 @@ export class FileUploadComponent implements OnInit  {
               this.progress = Math.round(100 * event.loaded / event.total);
             } else if (event instanceof HttpResponse) {
               this.message = event.body.message;
-              this.fileInfos = this.uploadService.getFiles();
+              this.showFiles()
               this.ngOnInit()
             }
           },

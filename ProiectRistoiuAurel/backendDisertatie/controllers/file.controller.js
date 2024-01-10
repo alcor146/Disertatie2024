@@ -35,7 +35,8 @@ exports.getListFiles = (req, res) => {
         url: baseUrl + file,
       });
     });
-    res.status(200).send(fileInfos);
+    console.log(fileInfos)
+    res.status(200).json({success: true, message: 'GET /Carts Works!', data: fileInfos});
   });
 };
 

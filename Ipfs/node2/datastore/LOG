@@ -95,3 +95,37 @@
 19:52:20.727337 version@stat F·[3 1] S·171KiB[160KiB 10KiB] Sc·[0.75 0.00]
 19:52:20.740144 db@janitor F·6 G·0
 19:52:20.740228 db@open done T·18.723804ms
+=============== Jan 10, 2024 (EET) ===============
+09:28:27.856440 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+09:28:27.859214 version@stat F·[3 1] S·171KiB[160KiB 10KiB] Sc·[0.75 0.00]
+09:28:27.859289 db@open opening
+09:28:27.859370 journal@recovery F·1
+09:28:27.859478 journal@recovery recovering @25
+09:28:27.864685 memdb@flush created L0@26 N·141 S·47KiB "/F5..BCI,v1231":"/pr..YIS,v1313"
+09:28:27.865073 version@stat F·[4 1] S·219KiB[208KiB 10KiB] Sc·[1.00 0.00]
+09:28:27.875390 db@janitor F·10 G·3
+09:28:27.875426 db@janitor removing manifest-26
+09:28:27.875453 db@janitor removing table-27
+09:28:27.875475 db@janitor removing table-24
+09:28:27.875525 db@open done T·16.226199ms
+09:28:27.875583 table@compaction L0·4 -> L1·1 S·219KiB Q·1370
+09:28:27.881456 table@build created L1@29 N·220 S·33KiB "/F5..BCI,v1231":"/pr..YIS,v1313"
+09:28:27.881543 version@stat F·[0 1] S·33KiB[0B 33KiB] Sc·[0.00 0.00]
+09:28:27.883197 table@compaction committed F-4 S-185KiB Ke·0 D·513 T·7.5611ms
+09:28:27.883358 table@remove removed @21
+09:28:27.883695 table@remove removed @18
+09:28:27.883766 table@remove removed @15
+09:28:27.883795 table@remove removed @14
+10:44:40.020606 db@close closing
+10:44:40.021347 db@close done T·707.8µs
+=============== Jan 10, 2024 (EET) ===============
+13:13:10.281803 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+13:13:10.283137 version@stat F·[0 1] S·33KiB[0B 33KiB] Sc·[0.00 0.00]
+13:13:10.283218 db@open opening
+13:13:10.283279 journal@recovery F·1
+13:13:10.283612 journal@recovery recovering @27
+13:13:10.287061 memdb@flush created L0@30 N·42 S·20KiB "/F5..BCI,v1373":"/pr..YIS,d1381"
+13:13:10.287263 version@stat F·[1 1] S·53KiB[20KiB 33KiB] Sc·[0.25 0.00]
+13:13:10.294050 db@janitor F·5 G·1
+13:13:10.294062 db@janitor removing table-26
+13:13:10.294121 db@open done T·10.888799ms

@@ -51,7 +51,7 @@ export class FileUploadComponent implements OnInit  {
       })
   }
 
-  upload(): void {
+  async upload() {
     this.progress = 0;
 
     if (this.selectedFiles) {
@@ -59,34 +59,24 @@ export class FileUploadComponent implements OnInit  {
 
       if (file) {
         this.currentFile = file;
-
-        this.uploadService.upload(this.currentFile).subscribe({
-          next: (event: any) => {
-            if (event.type === HttpEventType.UploadProgress) {
-              this.progress = Math.round(100 * event.loaded / event.total);
-            } else if (event instanceof HttpResponse) {
-              this.message = event.body.message;
-              this.showFiles()
-              this.ngOnInit()
-            }
-          },
-          error: (err: any) => {
-            console.log(err);
-            this.progress = 0;
-
-            if (err.error && err.error.message) {
-              this.message = err.error.message;
-            } else {
-              this.message = 'Could not upload the file!';
-            }
-
-            this.currentFile = undefined;
-          }
-        });
+        const response = await this.uploadService.uploadFile(this.currentFile)
+        this.showFiles()
+        
       }
 
       this.selectedFiles = undefined;
     }
   }
+
+  // async someFunction() {
+  //   try {
+  //     const response = await this.uploadService.uploadFile(myFile);
+  //     // File has reached the backend, handle the response
+  //     console.log(response);
+  //   } catch (error) {
+  //     // Handle errors
+  //     console.error(error);
+  //   }
+  // }
 
 }

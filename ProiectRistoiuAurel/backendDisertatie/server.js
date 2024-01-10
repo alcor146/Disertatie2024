@@ -1,9 +1,8 @@
-var cors = require('cors');
-const express = require('express');
+import cors from 'cors';
+import express from 'express';
 const app = express();
 const PORT = 3001;
-const path = require('path')
-
+import {router} from "./routes/clients.js";
 
 
 app.use(cors({
@@ -11,9 +10,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
-app.use('/api/files', express.static(path.join(__dirname, 'resources')));
-app.use('/api', require('./routes/clients'));
+app.use('/api', router);
 
 
 const server = app.listen( PORT, () => {

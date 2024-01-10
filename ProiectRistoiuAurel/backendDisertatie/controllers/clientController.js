@@ -1,61 +1,49 @@
+const uploadFile = require("../middleware/upload");
+var fs = require("fs")
+const baseUrl = "http://localhost:3001/api/files";
 
-var xml2js = require("xml2js")
-    fs = require("fs")
-    path = require("path");
- 
-exports.client = async (req, res, next) => {
-
-    var parser = new xml2js.Parser();
-    try{
-        fs.readFile("resources/data.xml", function(err, data) {
-            parser.parseString(data, function (err, result) { 
-                console.log(result)
-                if(!result)
-                    res.status(404).json({success: false})
-                else
-                    res.status(200).json({success: true, db: result})
-            });
-        });
-    }catch(err){
-        console.log(err)
+exports.upload = async (req, res) => {
+  try {
+    await uploadFile(req, res);
+    if (req.file == undefined) {
+      return res.status(400).send({ message: "Please upload a file!" });
     }
-}
-
-exports.newClient = async (req, res, next) => {
-    console.log(req.body)
-    const builder = new xml2js.Builder()
-    const xml = builder.buildObject(req.body)
-    console.log(path.resolve(__dirname, "../db/data.xml"))
-    fs.writeFileSync(path.resolve(__dirname, "../db/data.xml"), xml, function(err, file){
-        if(err)
-            res.status(404).json({success: false})
-        else
-            res.status(200).json({success: true})
+    console.log(req.file)
+    res.status(200).send({
+      message: "Uploaded the file successfully: " + req.file.originalname,
     });
-}
-
-exports.modifyClient = async (req, res, next) => {
-    console.log(req.body)
-    const builder = new xml2js.Builder()
-    const xml = builder.buildObject(req.body)
-    console.log(path.resolve(__dirname, "../db/data.xml"))
-    fs.writeFileSync(path.resolve(__dirname, "../db/data.xml"), xml, function(err, file){
-        if(err)
-            res.status(404).json({success: false})
-        else
-            res.status(200).json({success: true})
+  } catch (err) {
+    console.log(err)
+    res.status(500).send({
+      message: `Could not upload the file: ${req.file.originalname}. ${err}`,
     });
-}
-
-exports.deleteClient = async (req, res, next) => {
-    console.log(req.body)
-    const builder = new xml2js.Builder()
-    const xml = builder.buildObject(req.body)
-    console.log(path.resolve(__dirname, "../db/data.xml"))
-    fs.writeFileSync(path.resolve(__dirname, "../db/data.xml"), xml, function(err, file){
-        if(err)
-            res.status(404).json({success: false})
-        else
-            res.status(200).json({success: true})
+  }
+};
+exports.getListFiles = (req, res) => {
+  const directoryPath = "resources/";
+  console.log(directoryPath)
+  fs.readdir(directoryPath, function (err, files) {
+    if (err) {
+      res.status(500).send({
+        message: "Unable to scan files!",
+      });
+    }
+    let fileInfos = [];
+    files.forEach((file) => {
+      fileInfos.push({
+        name: file,
+        url: baseUrl + file,
+      });
     });
-}
+    console.log(fileInfos)
+    res.status(200).json({success: true, message: 'GET /Carts Works!', data: fileInfos});
+  });
+};
+
+
+exports.download = (req, res) => {
+  const fileName = req.params.name;
+  console.log(fileName)
+  const file = path.resolve(__dirname, `../resources/${fileName}`);
+  res.download(file); 
+};

@@ -1,19 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const { client, newClient, modifyClient, deleteClient } = require('../controllers/clientController');
-const {upload, getListFiles,download} = require("../controllers/file.controller");
-const { rentals} = require('../controllers/jsonController');
+import express from "express";
+export const router = express.Router();
 
-router.route("/clients/getClients").get(client)
-router.route("/clients/createClient").post(newClient)
-router.route("/clients/editClient/:id").post(modifyClient)
-router.route("/clients/deleteClient/:id").post(deleteClient)
+import  {upload, getListFiles, download} from  "../controllers/file.controller.js";
 
-router.route("/upload").post(upload)
-router.route("/files").get(getListFiles)
-router.route("/documents/:name").get(download)
-
-router.route("/rentals/getRentals").get(rentals)
+router.route("/upload").post(upload);
+router.route("/files").get(getListFiles);
+router.route("/documents/:name").get(download);
 
 
-module.exports = router;

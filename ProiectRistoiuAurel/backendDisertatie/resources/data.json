@@ -54,45 +54,7 @@
               "numberOfBykes": "1"
             }
           }
-        },
-        {
-          "id": "4",
-          "clientInformation": {
-            "name": "Cartof",
-            "SSN": "33333333333333",
-            "securitySeries": "DD",
-            "securityNumber": "190823",
-            "phoneNumber": "234234324"
-          },
-          "rentalDetails": {
-            "date": "10/08/2021",
-            "numberOfHours": "5",
-            "bikeDetails": {
-              "bykeType": "Touring Bike",
-              "numberOfBykes": "1"
-            }
-          }
-        },
-        {
-          "id": "5",
-          "clientInformation": {
-            "name": "Cartof",
-            "SSN": "33333333333333",
-            "securitySeries": "DD",
-            "securityNumber": "190823",
-            "phoneNumber": "234234324"
-          },
-          "rentalDetails": {
-            "date": "10/08/2021",
-            "numberOfHours": "5",
-            "bikeDetails": {
-              "bykeType": "Touring Bike",
-              "numberOfBykes": "1"
-            }
-          }
         }
-        
-        
       ]
     }
   }

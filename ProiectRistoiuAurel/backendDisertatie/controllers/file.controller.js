@@ -48,11 +48,6 @@ export const upload = async (req, res, next) => {
     }
     console.log(ipfsHashes);
 
-
-
-    // Process the data as needed
-    // For example, you can save it to a file, send it to another service, etc.
-
     res.json({ message: 'File received successfully' });
   });
 };

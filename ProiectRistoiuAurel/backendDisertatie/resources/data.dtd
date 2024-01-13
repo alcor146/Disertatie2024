@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ELEMENT rentals (rental*)>
+<!ELEMENT rentals (rental+)>
 <!ELEMENT rental (clientInformation, rentalDetails)>
 <!ATTLIST rental id CDATA #REQUIRED>
 <!ELEMENT clientInformation (name, SSN, securitySeries, securityNumber, phoneNumber)>

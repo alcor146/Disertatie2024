@@ -2,9 +2,8 @@ import fs from "fs";
 const baseUrl = "http://localhost:3001/api/files";
 import { create } from 'ipfs-http-client';
 import secrets from 'secrets.js-grempe';
-import { readFileSync } from 'fs';
-import stream from "stream"
-
+import Web3 from 'web3';
+import configuration from '../../../Truffle/build/contracts/FileManagement.json' assert { type: "json" };
 
 const nodesAPI = [
   'http://localhost:5002',
@@ -17,6 +16,30 @@ const nodes = [];
 for (let i=0; i<nodesAPI.length; i++){
   nodes.push(create({ url: nodesAPI[i]}));
 }
+
+
+
+const CONTRACT_ADDRESS = configuration.networks[12345].address
+const CONTRACT_ABI = configuration.abi;
+
+const web3 = new Web3(
+  Web3.givenProvider || 'http://127.0.0.1:30304'
+);
+const contract = new web3.eth.Contract(
+  CONTRACT_ABI,
+  CONTRACT_ADDRESS
+);
+
+const accounts = await web3.eth.getAccounts()
+let account = accounts[0];
+
+let files = contract.methods.getFileNames()
+console.log("files ", files)
+
+// console.log("aaaa: ", CONTRACT_ADDRESS)
+// console.log("bbbb: ", CONTRACT_ABI)
+// console.log("cccc: ", accounts)
+
 
 
 export const upload = async (req, res, next) => {
@@ -54,23 +77,28 @@ export const upload = async (req, res, next) => {
 
 
 export const getListFiles = (req, res, next) => {
-  const directoryPath = "resources/";
-  console.log(directoryPath)
-  fs.readdir(directoryPath, function (err, files) {
-    if (err) {
-      res.status(500).send({
-        message: "Unable to scan files!",
-      });
-    }
-    let fileInfos = [];
-    files.forEach((file) => {
-      fileInfos.push({
-        name: file,
-        url: baseUrl + file,
-      });
-    });
-    res.status(200).json({success: true, message: 'GET /Carts Works!', data: fileInfos});
-  });
+  // const directoryPath = "resources/";
+  // console.log(directoryPath)
+  // fs.readdir(directoryPath, function (err, files) {
+  //   if (err) {
+  //     res.status(500).send({
+  //       message: "Unable to scan files!",
+  //     });
+  //   }
+  //   let fileInfos = [];
+  //   files.forEach((file) => {
+  //     fileInfos.push({
+  //       name: file,
+  //       url: baseUrl + file,
+  //     });
+  //   });
+  //   res.status(200).json({success: true, message: 'GET /Carts Works!', data: fileInfos});
+  //});
+
+
+  res.status(200)
+
+
 };
 
 async function downloadShare(ipfs, hash) {
@@ -124,23 +152,3 @@ export const download = async (req, res, next) => {
     }
 };
 
-
-
-async function reconstructSecret() {
-    const shares = [];
-
-    for (let i=0; i<nodes.length; i++){
-      const share = await downloadShare(nodes[i], ipfsHashes[i]);
-      shares.push(share);
-    }
-       
-    if (shares.length >= 2) {
-        const outputFilePath = 'ReconstructedFile.pdf';
-        const reconstructedHex4 = secrets.combine(shares); // Reconstruct the base64 encoded content
-        const reconstructedData = Buffer.from(reconstructedHex4, 'hex');
-        fs.writeFileSync(outputFilePath, reconstructedData);
-        console.log(`DOCX document successfully reconstructed and saved to ${outputFilePath}`);
-    } else {
-        console.error('Insufficient shares for reconstruction.');
-    }
-}

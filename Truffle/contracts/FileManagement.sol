@@ -31,16 +31,18 @@ contract FileManagement {
         require(ipfsHashes.length == 3, "IPFS hashes should be provided for all three positions");
 
         uint index = ownerFileIndexes[msg.sender][name];
-        string[3][] memory ipfsMatrix;
-
-        files[index - 1].hashes.push(hash);
 
         if(index > 0){
             files[index - 1].fileIpfsHashes.push(ipfsHashes);
-            
+            files[index - 1].hashes.push(hash);
         }else{
+
+            string[3][] memory ipfsMatrix = new string[3][](1);
+            string[] memory hashes = new string[](1);
+
+            hashes[0] = hash;
             ipfsMatrix[0] = ipfsHashes;
-            files.push(File(name, ipfsMatrix, files[index - 1].hashes, msg.sender));
+            files.push(File(name, ipfsMatrix, hashes, msg.sender));
         }
     }
 

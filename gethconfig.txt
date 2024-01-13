@@ -24,8 +24,9 @@ export PATH=$PATH:/usr/local/go/bin
 npx
 npx truffle migrate --network geth
 npx truffle console --network geth
-let fs = await FileStorage.deployed()
-fs.addFile("name", "content")
+let fm = await FileManagement.deployed()
+fm.addFile("name", ["asd", "asd", "asf"], "content")
+fm.testContract()
 let test = await test.deployed()
 let SSS = await SSS.deployed()
 

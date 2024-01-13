@@ -15743,12 +15743,12 @@
     "12345": {
       "events": {},
       "links": {},
-      "address": "0xE3383d0761e0333625056b0BE0503C11B32ec3Ab",
-      "transactionHash": "0x7e45f925714dc92fc2c249e2623a98d45d1c006b58ba91fbf0389bdd6f928b8c"
+      "address": "0xdC71B0f1f1f1492D1b4d4e13aa55603a9c0fCf56",
+      "transactionHash": "0xbb67f7bac23dab334cb896b5b770772e4abbceda478fe688b25b154d43d5dc88"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2023-10-14T19:37:46.357Z",
+  "updatedAt": "2024-01-12T18:04:54.949Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

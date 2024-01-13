@@ -67,23 +67,11 @@ module.exports = {
 
     geth: {
       host: "127.0.0.1",     // Localhost (default: none)
-      port: 8555,            // Standard Ethereum port (default: none)
+      port: 30304,            // Standard Ethereum port (default: none)
       network_id: "12345",       // Any network (default: none)
      },
 
-     
-    node1: {
-      host: "localhost",  // RPC URL for node 1
-      port: 8545,
-      network_id: "12345",
-      gas: 6000000,
-    },
-    node2: {
-      host: "localhost",  // RPC URL for node 2
-      port: 8546,
-      network_id: "12345",
-      gas: 6000000,
-    },    
+      
     // An additional network, but with some advanced options…
     // advanced: {
     //   port: 8777,             // Custom port

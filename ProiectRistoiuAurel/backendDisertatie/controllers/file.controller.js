@@ -1,10 +1,12 @@
 import fs from "fs";
-const baseUrl = "http://localhost:3001/api/files";
 import { create } from 'ipfs-http-client';
 import secrets from 'secrets.js-grempe';
+import crypto from  'crypto';
+
 import Web3 from 'web3';
 import configuration from '../../../Truffle/build/contracts/FileManagement.json' assert { type: "json" };
 
+const baseUrl = "http://localhost:3001/api/files";
 const nodesAPI = [
   'http://localhost:5002',
   'http://localhost:5003',
@@ -15,6 +17,13 @@ const nodes = [];
 
 for (let i=0; i<nodesAPI.length; i++){
   nodes.push(create({ url: nodesAPI[i]}));
+}
+
+var getHash = ( content ) => {				
+  var hash = crypto.createHash('sha256');
+  let data = hash.update(content);
+  let gen_hash= data.digest('hex');
+  return gen_hash;
 }
 
 
@@ -33,8 +42,23 @@ const contract = new web3.eth.Contract(
 const accounts = await web3.eth.getAccounts()
 let account = accounts[0];
 
-let files = contract.methods.getFileNames()
-console.log("files ", files)
+const ipfsHashes = [
+  'a',
+  'b',
+  'c'
+];
+
+console.log(account)
+
+
+// try{
+//   let result = await contract.methods.addFile("weqqwrqweef", ipfsHashes, "mere", account).call()
+//   console.log("resukt: ", result)
+
+// }catch(error){
+//   console.error("Transaction failed:", error);
+// }
+
 
 // console.log("aaaa: ", CONTRACT_ADDRESS)
 // console.log("bbbb: ", CONTRACT_ABI)
@@ -69,36 +93,42 @@ export const upload = async (req, res, next) => {
         ipfsHashes.push(ipfsHash);
         console.log(`Share ${i + 1} uploaded to IPFS with hash: ${ipfsHash}`);
     }
+
+    let hash = getHash(dataBuffer)
+    console.log(req.headers.filename)
     console.log(ipfsHashes);
+    console.log(hash)
+
+    const gas = 2000000;  // Adjust gas limit
+    const gasPrice = 1000000000;  // Adjust gas price (wei)
+
+    let result = await contract.methods.addFile(req.headers.filename, ipfsHashes, hash, account)
+                  .send({ from: account, gas: gas, gasPrice: gasPrice });
+
+    console.log('Transaction Hash:', result.transactionHash);
+
 
     res.json({ message: 'File received successfully' });
   });
 };
 
 
-export const getListFiles = (req, res, next) => {
-  // const directoryPath = "resources/";
-  // console.log(directoryPath)
-  // fs.readdir(directoryPath, function (err, files) {
-  //   if (err) {
-  //     res.status(500).send({
-  //       message: "Unable to scan files!",
-  //     });
-  //   }
-  //   let fileInfos = [];
-  //   files.forEach((file) => {
-  //     fileInfos.push({
-  //       name: file,
-  //       url: baseUrl + file,
-  //     });
-  //   });
-  //   res.status(200).json({success: true, message: 'GET /Carts Works!', data: fileInfos});
-  //});
+export const getListFiles = async (req, res, next) => {
+  
+    let fileInfos = [];
 
+    let files = await contract.methods.allFiles().call()
+    console.log(files)
 
-  res.status(200)
+    files.forEach((file) => {
+      fileInfos.push({
+        name: file.name,
+        url: baseUrl + file,
+      });
+    });
 
-
+    console.log("fileInfos:", fileInfos)
+    res.status(200).json({success: true, message: 'GET /Carts Works!', data: fileInfos});
 };
 
 async function downloadShare(ipfs, hash) {

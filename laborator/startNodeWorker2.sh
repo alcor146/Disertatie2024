@@ -1,6 +1,6 @@
 ./go-ethereum/build/bin/geth --datadir lab_datadir/node3 --networkid 12345 \
---bootnodes 'enode://c6a6ced22ce8d30511d4a34260ab76fd744fde02f399ba56875dc670c682ea50847b51d5fa8babac3664511c4634047b2647839b4bff1a7337aec829d336d62c@127.0.0.1:30314' \
---http --http.api 'web3,eth,net,miner,personal' \
+--bootnodes 'enode://512e151590d7519121911091da54526b97fb5b82845b4cd21ebdbb0d9b462aa8221e151fb9ddf8669a4e4a796543d414a499d9af5d3dda353bcb9db10f17bfba@127.0.0.1:30314' \
+--http --http.api 'web3,eth,net,personal' \
 --http.port 30306 \
 --port 30316 \
 --authrpc.port 8554 

@@ -1,5 +1,3 @@
-
-
 pragma solidity ^0.8.13;
 // SPDX-License-Identifier: MIT
 
@@ -10,51 +8,68 @@ contract FileManagement {
         string[3][] fileIpfsHashes; // Matrix to store three IPFS hashes for each version
         string[] hashes;
         address owner;
+        
     }
 
     File[] public files;
     mapping(address => mapping(string => uint)) private ownerFileIndexes;
 
-    function getFileNames() public view returns (string[] memory) {
-        uint256 fileCount = files.length;
 
-        string[] memory storedFiles = new string[](fileCount);
+    function getFileNames() public view returns (string[] memory) {
+         uint256 fileCount = files.length;
+
+        // Temporary array to store filtered file names
+        string[] memory ownerFiles = new string[](fileCount);
+        uint256 ownerFileCount = 0;
 
         for (uint256 i = 0; i < fileCount; i++) {
-            storedFiles[i] = files[i].name;
+            // Check if the file belongs to the specified owner
+            if (files[i].owner == msg.sender) {
+                ownerFiles[ownerFileCount] = files[i].name;
+                ownerFileCount++;
+            }
         }
 
-        return storedFiles;
+        // Create a new array with the correct size to store only the owner's files
+        string[] memory result = new string[](ownerFileCount);
+        for (uint256 j = 0; j < ownerFileCount; j++) {
+            result[j] = ownerFiles[j];
+        }
+
+        return result;
     }
 
-    function addFile(string memory name, string[3] memory ipfsHashes, string memory hash) public {
+    function addFile(string memory name, string[3] memory ipfsHashes, string memory hash) public  {
         require(ipfsHashes.length == 3, "IPFS hashes should be provided for all three positions");
 
         uint index = ownerFileIndexes[msg.sender][name];
+        
 
         if(index > 0){
             files[index - 1].fileIpfsHashes.push(ipfsHashes);
             files[index - 1].hashes.push(hash);
         }else{
-
             string[3][] memory ipfsMatrix = new string[3][](1);
             string[] memory hashes = new string[](1);
 
             hashes[0] = hash;
             ipfsMatrix[0] = ipfsHashes;
-            files.push(File(name, ipfsMatrix, hashes, msg.sender));
+            File memory file = File(name, ipfsMatrix, hashes, msg.sender);
+            files.push(file);
+            ownerFileIndexes[msg.sender][name] = files.length;
         }
     }
 
-    function getFile(string memory name) public view returns (string memory, string[3][] memory) {
+    function getFile(string memory name) public view returns (File memory) {
         uint index = ownerFileIndexes[msg.sender][name];
         require(index > 0, "File not found");
-        return (files[index - 1].name, files[index - 1].fileIpfsHashes);
+        return (files[index - 1]);
     }
 
-    function testContract() public pure returns (uint) {
-        uint x=1;
-        return x;
+    function testContract1() public pure returns (uint, uint) {
+        uint x=41;
+        uint y=32;
+        return (x, y);
     }
 
 }

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dom-parser": "^0.1.6",
     "express": "^4.17.2",
     "ipfs-http-client": "^60.0.1",

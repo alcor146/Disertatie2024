@@ -51,27 +51,16 @@ const ipfsHashes = [
 console.log(account)
 
 
-// try{
-//   let result = await contract.methods.addFile("weqqwrqweef", ipfsHashes, "mere", account).call()
-//   console.log("resukt: ", result)
-
-// }catch(error){
-//   console.error("Transaction failed:", error);
-// }
-
-
-// console.log("aaaa: ", CONTRACT_ADDRESS)
-// console.log("bbbb: ", CONTRACT_ABI)
-// console.log("cccc: ", accounts)
-
-
 
 export const upload = async (req, res, next) => {
   console.log("body: ", req.body)
-  console.log("file: ", req.headers.filename)
+
   if (!req.headers['content-type'] || !req.headers['content-type'].startsWith('multipart/form-data')) {
     return res.status(400).json({ error: 'Invalid content type. Use multipart/form-data.' });
   }
+
+  let name = req.headers.filename;
+  
 
   const chunks = [];
   
@@ -95,14 +84,14 @@ export const upload = async (req, res, next) => {
     }
 
     let hash = getHash(dataBuffer)
-    console.log(req.headers.filename)
-    console.log(ipfsHashes);
-    console.log(hash)
+    console.log("file: ", name)
+    console.log("IPFS:", ipfsHashes);
+    console.log("hash:",hash)
 
     const gas = 2000000;  // Adjust gas limit
     const gasPrice = 1000000000;  // Adjust gas price (wei)
 
-    let result = await contract.methods.addFile(req.headers.filename, ipfsHashes, hash, account)
+    let result = await contract.methods.addFile(name, ipfsHashes, hash, account)
                   .send({ from: account, gas: gas, gasPrice: gasPrice });
 
     console.log('Transaction Hash:', result.transactionHash);
@@ -117,18 +106,30 @@ export const getListFiles = async (req, res, next) => {
   
     let fileInfos = [];
 
-    let files = await contract.methods.allFiles().call()
-    console.log(files)
+    let files = await contract.methods.getFileNames().call({ from: account })
+    console.log("files: ",files)
 
     files.forEach((file) => {
       fileInfos.push({
-        name: file.name,
+        name: file,
         url: baseUrl + file,
       });
     });
 
-    console.log("fileInfos:", fileInfos)
     res.status(200).json({success: true, message: 'GET /Carts Works!', data: fileInfos});
+};
+
+export const deleteFile = async (req, res, next) => {
+  
+  let fileName = req.body.name;
+
+  const gas = 2000000;  // Adjust gas limit
+  const gasPrice = 1000000000;  // Adjust gas price (wei)
+
+  await contract.methods.removeFile(fileName)
+    .send({ from: account, gas: gas, gasPrice: gasPrice });
+
+  res.status(200).json({success: true, message: 'Delete /File Works!'});
 };
 
 async function downloadShare(ipfs, hash) {
@@ -147,13 +148,11 @@ async function downloadShare(ipfs, hash) {
 export const download = async (req, res, next) => {
   const fileName = req.params.name;
 
-  const shares = [];
+  let file = await contract.methods.getFile(fileName).call({ from: account })
 
-  const ipfsHashes = [
-    'QmW2PyjsxDQZrsgW7jijPxMGP6pWpnz2bVdLj2MbTS2ZFU',
-    'QmSmTGUvxEQsga7NSA35cxq7XjoyqyJenwajvdBAooDJp9',
-    'QmW68Yj7Z8PGZn9ZtbDpC2gVfyFdBsxdRpefobZYjiWjBJ'
-  ];
+  const ipfsHashes = file.fileIpfsHashes[file.fileIpfsHashes.length-1];
+
+  const shares = [];
 
     for (let i=0; i<nodes.length; i++){
       const share = await downloadShare(nodes[i], ipfsHashes[i]);
@@ -175,7 +174,7 @@ export const download = async (req, res, next) => {
           console.error('Error handling download:', error);
           res.status(500).json({ error: 'Internal server error' });
         }
-        console.log(`DOCX document successfully reconstructed and saved to `);
+        console.log(`DOCX document successfully reconstructed and saved to Downloads folder `);
     } else {
         console.error('Insufficient shares for reconstruction.');
         res.status(401)

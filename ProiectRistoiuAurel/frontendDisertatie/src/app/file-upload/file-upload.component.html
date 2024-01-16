@@ -25,7 +25,8 @@
         <tr *ngFor="let file of fileInfos">
           <td>{{ file.name }}</td>
           <td>
-            <button class="button" mat-raised-button color="warn" (click)="download(file)">Download</button>
+            <button class="button" mat-raised-button color="primary" (click)="download(file)">Download</button>
+            <button class="button" mat-raised-button color="warn" (click)="delete(file)">Delete</button>
           </td>
         </tr>
       </tbody>

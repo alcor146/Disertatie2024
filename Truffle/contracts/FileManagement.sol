@@ -24,7 +24,7 @@ contract FileManagement {
 
         for (uint256 i = 0; i < fileCount; i++) {
             // Check if the file belongs to the specified owner
-            if (files[i].owner == msg.sender) {
+            if (ownerFileIndexes[msg.sender][files[i].name] > 0) {
                 ownerFiles[ownerFileCount] = files[i].name;
                 ownerFileCount++;
             }
@@ -64,6 +64,16 @@ contract FileManagement {
         uint index = ownerFileIndexes[msg.sender][name];
         require(index > 0, "File not found");
         return (files[index - 1]);
+    }
+
+    function removeFile(string memory name) public {
+
+        uint index = ownerFileIndexes[msg.sender][name];
+        require(index > 0, "File doesn t exist");
+        
+        ownerFileIndexes[msg.sender][name] = 0;
+        files[index - 1].fileIpfsHashes = new string[3][](0);  
+        files[index - 1].hashes = new string[](0);            
     }
 
     function testContract1() public pure returns (uint, uint) {

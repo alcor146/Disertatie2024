@@ -151,3 +151,26 @@
 10:38:48.608089 version@stat F·[3 1] S·165KiB[133KiB 31KiB] Sc·[0.75 0.00]
 10:38:48.617280 db@janitor F·6 G·0
 10:38:48.617352 db@open done T·16.5116ms
+=============== Jan 16, 2024 (EET) ===============
+00:31:39.360967 db@close closing
+00:31:39.361096 db@close done T·135.1µs
+=============== Jan 16, 2024 (EET) ===============
+10:29:18.999241 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:29:18.999699 version@stat F·[3 1] S·165KiB[133KiB 31KiB] Sc·[0.75 0.00]
+10:29:18.999761 db@open opening
+10:29:18.999866 journal@recovery F·1
+10:29:19.000995 journal@recovery recovering @37
+10:29:19.006149 memdb@flush created L0@39 N·62 S·67KiB "/F5..YSQ,v1422":"/pr..GEU,v1415"
+10:29:19.006411 version@stat F·[4 1] S·232KiB[200KiB 31KiB] Sc·[1.00 0.00]
+10:29:19.020261 db@janitor F·7 G·0
+10:29:19.020359 db@open done T·20.56451ms
+10:29:19.020475 table@compaction L0·4 -> L1·1 S·232KiB Q·1424
+10:29:19.043174 table@build created L1@42 N·189 S·30KiB "/F5..YSQ,v1422":"/pr..GEU,v1334"
+10:29:19.043280 version@stat F·[0 1] S·30KiB[0B 30KiB] Sc·[0.00 0.00]
+10:29:19.049205 table@compaction committed F-4 S-202KiB Ke·0 D·476 T·28.624213ms
+10:29:19.049530 table@remove removed @36
+10:29:19.049632 table@remove removed @33
+10:29:19.049710 table@remove removed @30
+10:29:19.049779 table@remove removed @29
+13:05:50.146214 db@close closing
+13:05:50.146812 db@close done T·564.301µs

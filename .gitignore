@@ -1,6 +1,14 @@
 #files
 
 */node_modules
+Ipfs/node1
+Ipfs/node2
+Ipfs/node3
+laborator/go-ethereum
+laborator/lab_datadir/node1/geth
+laborator/lab_datadir/node2/geth
+laborator/lab_datadir/node3/geth
+
 
 
 

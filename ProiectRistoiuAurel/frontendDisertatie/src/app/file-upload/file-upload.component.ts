@@ -51,6 +51,18 @@ export class FileUploadComponent implements OnInit  {
       })
   }
 
+  delete(record: any) {
+    let body = {
+      name : record.name
+    }
+    console.log("body: " ,body)
+    this.http.delete(`${this.baseUrl}/documents`, {body})
+      .subscribe((res ) => {
+        console.log("res2: ", res)
+        this.showFiles()
+      })
+  }
+
   async upload() {
     this.progress = 0;
 

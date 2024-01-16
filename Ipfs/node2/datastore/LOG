@@ -151,3 +151,26 @@
 10:38:38.860596 version@stat F·[3 1] S·189KiB[156KiB 33KiB] Sc·[0.75 0.00]
 10:38:38.871055 db@janitor F·6 G·0
 10:38:38.871115 db@open done T·16.350405ms
+=============== Jan 16, 2024 (EET) ===============
+00:31:42.050989 db@close closing
+00:31:42.051163 db@close done T·179.3µs
+=============== Jan 16, 2024 (EET) ===============
+10:29:15.668611 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:29:15.669003 version@stat F·[3 1] S·189KiB[156KiB 33KiB] Sc·[0.75 0.00]
+10:29:15.669081 db@open opening
+10:29:15.669193 journal@recovery F·1
+10:29:15.669745 journal@recovery recovering @37
+10:29:15.702101 memdb@flush created L0@39 N·34 S·75KiB "/F5..BCI,v2044":"/pr..YIS,v2034"
+10:29:15.702395 version@stat F·[4 1] S·265KiB[232KiB 33KiB] Sc·[1.00 0.00]
+10:29:15.716469 db@janitor F·7 G·0
+10:29:15.716545 db@open done T·47.451522ms
+10:29:15.716686 table@compaction L0·4 -> L1·1 S·265KiB Q·2046
+10:29:15.810776 table@build created L1@42 N·310 S·48KiB "/F5..BCI,v2044":"/pr..YIS,v1543"
+10:29:15.810877 version@stat F·[0 1] S·48KiB[0B 48KiB] Sc·[0.00 0.00]
+10:29:15.812984 table@compaction committed F-4 S-216KiB Ke·0 D·582 T·96.164846ms
+10:29:15.813212 table@remove removed @36
+10:29:15.813267 table@remove removed @33
+10:29:15.813692 table@remove removed @30
+10:29:15.813784 table@remove removed @29
+13:05:49.004796 db@close closing
+13:05:49.005184 db@close done T·385.4µs

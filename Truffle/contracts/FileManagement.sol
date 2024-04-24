@@ -39,6 +39,24 @@ contract FileManagement {
         return result;
     }
 
+    function getAllFiles() public view returns (string[] memory) {
+         uint256 fileCount = files.length;
+
+        // Temporary array to store filtered file names
+        string[] memory ownerFiles = new string[](fileCount);
+
+        for (uint256 i = 0; i < fileCount; i++) {
+                ownerFiles[i] = files[i].name;
+        }
+
+        return ownerFiles;
+    }
+
+    function getAll() public view returns (File[] memory) {
+        return files;
+    }
+
+
     function addFile(string memory name, string[3] memory ipfsHashes, string memory hash) public  {
         require(ipfsHashes.length == 3, "IPFS hashes should be provided for all three positions");
 

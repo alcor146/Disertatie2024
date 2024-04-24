@@ -23,6 +23,8 @@ import {FileUploadComponent } from './file-upload/file-upload.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {NgxPaginationModule } from 'ngx-pagination';
 
+import { MetamaskService } from './services/metamask.service';
+
 
 @NgModule({
   declarations: [
@@ -51,7 +53,7 @@ import {NgxPaginationModule } from 'ngx-pagination';
     MatProgressSpinnerModule,
     MatInputModule,
   ],
-  providers: [],
+  providers: [MetamaskService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

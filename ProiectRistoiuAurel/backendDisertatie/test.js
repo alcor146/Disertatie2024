@@ -1,5 +1,14 @@
+
+
 import Web3 from 'web3';
 import configuration from '../../Truffle/build/contracts/FileManagement.json' assert { type: "json" };
+
+const baseUrl = "http://localhost:3001/api/files";
+const nodesAPI = [
+  'http://localhost:5002',
+  'http://localhost:5003',
+  'http://localhost:5004'
+]
 
 const CONTRACT_ADDRESS = configuration.networks[12345].address
 const CONTRACT_ABI = configuration.abi;
@@ -13,44 +22,13 @@ const contract = new web3.eth.Contract(
 );
 
 const accounts = await web3.eth.getAccounts()
+console.log(accounts)
+
+
+
 let account = accounts[0];
+let files = await contract.methods.getFileNames().call({ from: account })
+    console.log("files: ",files)
 
-const ipfsHashes = [
-  'a',
-  'b',
-  'c'
-];
-
-console.log(account)
-
-
-// try{
-//     let result = await contract.methods.addFile("ghgh", ipfsHashes, "pere", account).call()
-//   console.log("resukt: ", result)
-
-// }catch(error){
-//   console.error("Transaction failed:", error);
-// }
-
-// let all = await contract.methods.allFiles().call()
-// console.log("all: ", all)
-
-// let newFile = await contract.methods.addFile("ghghergregebrere", ipfsHashes, "pere", account).call()
-// console.log("newFile: ", newFile)
-
-// let all = await contract.methods.allFiles().call()
-// console.log("all: ", all)
-
-let fileNames = await contract.methods.getFileNames(account).call()
-console.log("fileNames: ", fileNames)
-
-// let result1 = await contract.methods.allFiles().call()
-// console.log("result1: ", result1)
-
-
-
-
-// result = await contract.methods.getFile("name1" ,account).call()
-// console.log("fvfv: ", result)
 
 

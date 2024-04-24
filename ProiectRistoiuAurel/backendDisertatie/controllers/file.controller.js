@@ -1,4 +1,3 @@
-import fs from "fs";
 import { create } from 'ipfs-http-client';
 import secrets from 'secrets.js-grempe';
 import crypto from  'crypto';
@@ -41,13 +40,6 @@ const contract = new web3.eth.Contract(
 
 const accounts = await web3.eth.getAccounts()
 let account = accounts[0];
-
-const ipfsHashes = [
-  'a',
-  'b',
-  'c'
-];
-
 console.log(account)
 
 
@@ -162,6 +154,14 @@ export const download = async (req, res, next) => {
     if (shares.length >= 2) {
         const reconstructedHex4 = secrets.combine(shares); // Reconstruct the base64 encoded content
         const reconstructedData = Buffer.from(reconstructedHex4, 'hex');
+        let hash = getHash(reconstructedData)
+        if(hash != file.hashes[file.hashes.length-1])
+          console.log("File Integrity compromised");
+        else
+          console.log("File is secure");
+        
+        console.log("original hash: ", file.hashes[file.hashes.length-1])  
+        console.log("hash: ", hash)
         
         try {
           // Set the appropriate headers for the file download

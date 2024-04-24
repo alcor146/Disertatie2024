@@ -3,6 +3,7 @@ import { HttpEventType, HttpResponse, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/services/file-upload.service';
 import {saveAs} from "file-saver";
+import { MetamaskService } from '../services/metamask.service';
 
 
 @Component({
@@ -18,24 +19,31 @@ export class FileUploadComponent implements OnInit  {
   message = '';
   private baseUrl = 'http://localhost:3001/api';
   fileInfos: any[] = [];
+  currentAccount: string = '';
 
-  constructor(private uploadService: FileUploadService, private http: HttpClient) { }
+  constructor(private uploadService: FileUploadService, private http: HttpClient, private metamaskService: MetamaskService) { }
 
   ngOnInit(): void {
     this.showFiles()
   }
 
-  showFiles(){
+  showFiles() {
+    this.metamaskService.getCurrentAccount().then(
+      (res: any) => {
+        this.currentAccount = res
+        this.http.get('http://localhost:3001/api/files')
+          .subscribe(async (res: any) => {
+            console.log("res: ", res)
+            let jsonString = JSON.stringify(res);
+            let jsonDB = JSON.parse(jsonString);
+            this.fileInfos = res.data;
+            console.log(this.fileInfos)
+            console.log("acc: ", this.currentAccount)
+          })
+      }
+    )
+  }
 
-    this.http.get('http://localhost:3001/api/files')
-      .subscribe((res: any) => {
-        console.log("res: ", res)
-        let jsonString = JSON.stringify(res);
-        let jsonDB = JSON.parse(jsonString);
-        this.fileInfos = res.data;
-        console.log(this.fileInfos)
-      })
-}
 
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;

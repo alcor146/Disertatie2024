@@ -14,7 +14,7 @@ https://medium.com/blockchainbistro/set-up-a-private-ethereum-blockchain-and-dep
   --http.vhosts value
 
 
-geth --datadir datadir init genesis.json
+geth --datadir node1 init genesis.json
 geth  --http --networkid 2002 --http.api 'web3,eth,net,miner,personal' --http.corsdomain '*' --datadir ./datadir --http.port 35555 --allow-insecure-unlock --keystore Disertatie/datadir/keystore --unlock 0ff7f535ca871a7e0879d8ada49ccc8691f7dbdd
 geth attach ./geth.ipc
 miner.setEtherbase(eth.accounts[0])

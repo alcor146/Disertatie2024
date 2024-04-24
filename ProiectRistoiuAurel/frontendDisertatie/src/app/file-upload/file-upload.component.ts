@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpEventType, HttpResponse, HttpClient } from '@angular/common/http';
+import { HttpEventType, HttpResponse, HttpClient, HttpHeaders  } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/services/file-upload.service';
 import {saveAs} from "file-saver";
@@ -31,7 +31,10 @@ export class FileUploadComponent implements OnInit  {
     this.metamaskService.getCurrentAccount().then(
       (res: any) => {
         this.currentAccount = res
-        this.http.get('http://localhost:3001/api/files')
+        const headers =  {
+          'currentAccount': this.currentAccount
+        };
+        this.http.get('http://localhost:3001/api/files', {headers})
           .subscribe(async (res: any) => {
             console.log("res: ", res)
             let jsonString = JSON.stringify(res);
@@ -52,7 +55,12 @@ export class FileUploadComponent implements OnInit  {
 
   download(record: any) {
     console.log(`da1`)
-    this.http.get(`${this.baseUrl}/documents/${record.name}`,  { responseType: "blob" })
+
+    const headers = new HttpHeaders({
+      'currentAccount': this.currentAccount
+    });
+
+    this.http.get(`${this.baseUrl}/documents/${record.name}`,  { headers, responseType: "blob" })
       .subscribe((blob ) => {
         console.log(`${this.baseUrl}/documents/${record.name}`)
         saveAs(blob, record.name);
@@ -61,7 +69,8 @@ export class FileUploadComponent implements OnInit  {
 
   delete(record: any) {
     let body = {
-      name : record.name
+      name : record.name,
+      currentAccount: this.currentAccount
     }
     console.log("body: " ,body)
     this.http.delete(`${this.baseUrl}/documents`, {body})
@@ -79,9 +88,8 @@ export class FileUploadComponent implements OnInit  {
 
       if (file) {
         this.currentFile = file;
-        const response = await this.uploadService.uploadFile(this.currentFile)
+        const response = await this.uploadService.uploadFile(this.currentFile, this.currentAccount)
         this.showFiles()
-        
       }
 
       this.selectedFiles = undefined;

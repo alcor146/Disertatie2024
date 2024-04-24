@@ -91,7 +91,8 @@ contract FileManagement {
         
         ownerFileIndexes[msg.sender][name] = 0;
         files[index - 1].fileIpfsHashes = new string[3][](0);  
-        files[index - 1].hashes = new string[](0);            
+        files[index - 1].hashes = new string[](0);
+        files[index - 1].name = new string(0);            
     }
 
     function testContract1() public pure returns (uint, uint) {

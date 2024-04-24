@@ -22,6 +22,7 @@ export class MetamaskService {
       window.ethereum.on('accountsChanged', (accounts: string[]) => {
         // Time to reload your interface with accounts[0]!
         console.log(accounts[0]);
+        window.location.reload();
       });
     } else {
       console.warn("Metamask not found");

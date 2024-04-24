@@ -4,6 +4,8 @@ import crypto from  'crypto';
 
 import Web3 from 'web3';
 import configuration from '../../../Truffle/build/contracts/FileManagement.json' assert { type: "json" };
+import multer from 'multer';
+const uploadFile = multer();
 
 const baseUrl = "http://localhost:3001/api/files";
 const nodesAPI = [
@@ -38,34 +40,26 @@ const contract = new web3.eth.Contract(
   CONTRACT_ADDRESS
 );
 
-const accounts = await web3.eth.getAccounts()
-let account = accounts[0];
-console.log(account)
-
-
 
 export const upload = async (req, res, next) => {
-  console.log("body: ", req.body)
-
-  if (!req.headers['content-type'] || !req.headers['content-type'].startsWith('multipart/form-data')) {
-    return res.status(400).json({ error: 'Invalid content type. Use multipart/form-data.' });
-  }
-
-  let name = req.headers.filename;
   
 
-  const chunks = [];
   
-  // Listen for data chunks
-  req.on('data', chunk => {
-    chunks.push(chunk);
-  });
 
-  // When all data is received
-  req.on('end', async () => {
-    const dataBuffer = Buffer.concat(chunks);
-    console.log("file3: ", dataBuffer)
-    const HexData = dataBuffer.toString('hex');
+  uploadFile.single('file')(req, res, async (err) => {
+    if (err) {
+      console.error('Error parsing form data:', err);
+      return;
+    }
+  
+    const fileData = req.file.buffer; // File data
+    console.log("filedata: ",fileData)
+    const fileName = req.headers.filename; // Filename from headers
+    console.log("filename: ", fileName)
+    let account = req.headers.currentaccount
+    console.log("headers: ", account)
+
+    const HexData = fileData.toString('hex');
     const shares = secrets.share(HexData, 3, 2); 
     const ipfsHashes = [];
     for (let i = 0; i < shares.length; i++) {
@@ -75,28 +69,67 @@ export const upload = async (req, res, next) => {
         console.log(`Share ${i + 1} uploaded to IPFS with hash: ${ipfsHash}`);
     }
 
-    let hash = getHash(dataBuffer)
-    console.log("file: ", name)
+    let hash = getHash(fileData)
+    console.log("file: ", fileName)
     console.log("IPFS:", ipfsHashes);
     console.log("hash:",hash)
 
     const gas = 2000000;  // Adjust gas limit
     const gasPrice = 1000000000;  // Adjust gas price (wei)
 
-    let result = await contract.methods.addFile(name, ipfsHashes, hash, account)
+    let result = await contract.methods.addFile(fileName, ipfsHashes, hash, account)
                   .send({ from: account, gas: gas, gasPrice: gasPrice });
 
     console.log('Transaction Hash:', result.transactionHash);
 
-
-    res.json({ message: 'File received successfully' });
-  });
+  res.json({ message: 'File received successfully' });
+   });
 };
+
+  // const chunks = [];
+  
+  // // Listen for data chunks
+  // req.on('data', chunk => {
+  //   chunks.push(chunk);
+  // });
+
+  // // When all data is received
+  // req.on('end', async () => {
+  //   const dataBuffer = Buffer.concat(chunks);
+  //   console.log("file3: ", dataBuffer)
+  //   const HexData = dataBuffer.toString('hex');
+  //   const shares = secrets.share(HexData, 3, 2); 
+  //   const ipfsHashes = [];
+  //   for (let i = 0; i < shares.length; i++) {
+  //       const response = await nodes[i].add(shares[i]);
+  //       const ipfsHash = response.cid.toString();
+  //       ipfsHashes.push(ipfsHash);
+  //       console.log(`Share ${i + 1} uploaded to IPFS with hash: ${ipfsHash}`);
+  //   }
+
+  //   let hash = getHash(dataBuffer)
+  //   console.log("file: ", name)
+  //   console.log("IPFS:", ipfsHashes);
+  //   console.log("hash:",hash)
+
+  //   const gas = 2000000;  // Adjust gas limit
+  //   const gasPrice = 1000000000;  // Adjust gas price (wei)
+
+  //   let result = await contract.methods.addFile(name, ipfsHashes, hash, account)
+  //                 .send({ from: account, gas: gas, gasPrice: gasPrice });
+
+  //   console.log('Transaction Hash:', result.transactionHash);
+
+
+     
 
 
 export const getListFiles = async (req, res, next) => {
   
     let fileInfos = [];
+
+    let account = req.headers.currentaccount
+    console.log("headers: ", account)
 
     let files = await contract.methods.getFileNames().call({ from: account })
     console.log("files: ",files)
@@ -114,6 +147,8 @@ export const getListFiles = async (req, res, next) => {
 export const deleteFile = async (req, res, next) => {
   
   let fileName = req.body.name;
+  let account = req.body.currentaccount
+  console.log("headers: ", account)
 
   const gas = 2000000;  // Adjust gas limit
   const gasPrice = 1000000000;  // Adjust gas price (wei)
@@ -139,6 +174,9 @@ async function downloadShare(ipfs, hash) {
 
 export const download = async (req, res, next) => {
   const fileName = req.params.name;
+
+  let account = req.headers.currentaccount
+  console.log("headers: ", account)
 
   let file = await contract.methods.getFile(fileName).call({ from: account })
 

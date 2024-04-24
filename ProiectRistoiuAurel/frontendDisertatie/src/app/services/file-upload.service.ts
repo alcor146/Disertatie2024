@@ -46,12 +46,13 @@ export class FileUploadService {
   //   }
   // }
 
-  async uploadFile(file: File): Promise<any> {
+  async uploadFile(file: File, currentAccount: string): Promise<any> {
     const formData: FormData = new FormData();
     formData.append('file', file);
 
     const headers = new HttpHeaders({
-      'fileName': file.name
+      'fileName': file.name,
+      'currentAccount': currentAccount
     });
   
     try {

@@ -25,13 +25,21 @@ import {NgxPaginationModule } from 'ngx-pagination';
 
 import { MetamaskService } from './services/metamask.service';
 
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { ShareFileComponent } from './dialogs/share-file/share-file.component';
+
+import {MatMenuModule} from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FilesComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    ShareFileComponent
   ],
   imports: [
     BrowserModule,
@@ -45,13 +53,18 @@ import { MetamaskService } from './services/metamask.service';
     MatInputModule,
     MatToolbarModule,
     MatPaginatorModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatMenuModule
+
   ],
   exports: [
     MatTableModule,
     MatSortModule,
     MatProgressSpinnerModule,
     MatInputModule,
+    MatFormFieldModule
   ],
   providers: [MetamaskService],
   bootstrap: [AppComponent]

@@ -1,0 +1,2 @@
+cd ProiectRistoiuAurel/frontendDisertatie
+npm start

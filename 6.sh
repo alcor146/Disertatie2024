@@ -1,0 +1,1 @@
+sudo IPFS_PATH=config ipfs daemon --repo-dir Ipfs/node3

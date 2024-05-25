@@ -1,39 +1,41 @@
 
-  
+
 <div class="container mt-5">
-  <table class="table table-striped">
-    <thead class="thead-dark">
-      <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Name</th>
-          <th scope="col">Social Security Number</th>
-          <th scope="col">Security Series</th>
-          <th scope="col">Security Number</th>
-          <th scope="col">Phone Number</th>
-          <th scope="col">Date</th>
-          <th scope="col">Number of Hours</th>
-          <th scope="col">bykeType</th>
-          <th scope="col">numberOfBykes</th>
+ 
+  <div class="col-8">
+    <button *ngIf="currentAccount.toLowerCase() == admin.toLowerCase()" class="button create-button" mat-raised-button  color="primary" (click)="createAccount()">New account</button>
+  </div>
 
-      </tr>
-    </thead>
-    
-    <tbody>
-      <tr *ngFor="let record of records "> 
-          <td>{{ record.id }}</td>
-          <td>{{ record.clientInformation.name }}</td>
-          <td>{{ record.clientInformation.SSN  }}</td>
-          <td>{{ record.clientInformation.securitySeries  }}</td>
-          <td>{{ record.clientInformation.securityNumber  }}</td>
-          <td>{{ record.clientInformation.phoneNumber }}</td>
-          <td>{{ record.rentalDetails.date }}</td>
-          <td>{{ record.rentalDetails.numberOfHours }}</td>
-          <td>{{ record.rentalDetails.bikeDetails.bykeType }}</td>
-          <td>{{ record.rentalDetails.bikeDetails.numberOfBykes }}</td>
+  <div class="alert" style="background: green" [class.visible]="isVisible" *ngIf="getPrivateKey"> 
+    {{ privateKey}}
+  </div>
+  <div class="alert" style="background: red" [class.visible]="isVisible" *ngIf="accountExists"> 
+    {{ privateKey}}
+  </div>
 
-      </tr>
-    </tbody>
-  </table>
+  <div class="container mt-5">
+    <table mat-table class="table table-striped">
+      <thead class="thead-dark">
+          <tr>
+            <th>Account</th>
+            <th>Address</th>
+            <th>Edit</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let account of accountInfos">
+          <td>
+            {{account.name}}
+          </td>
+          <td>
+            {{account.accountAddress}}
+          </td>
+          <td>
+            <button class="button create-button" mat-raised-button  color="warn" (click)="deleteAccount(account)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-
+  

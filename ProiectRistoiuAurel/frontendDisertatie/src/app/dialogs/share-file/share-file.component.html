@@ -1,0 +1,14 @@
+<div class="header close">
+    <button mat-icon-button [mat-dialog-close]="data" (click)="onclose()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+
+  <div mat-dialog-content>
+    <input matInput [(ngModel)]="data.account" placeholder="Account">
+  </div>
+  <div mat-dialog-actions >
+    <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial class="button">
+        {{data?.confirmText}}
+    </button>
+  </div>

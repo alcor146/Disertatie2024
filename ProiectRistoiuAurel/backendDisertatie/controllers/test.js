@@ -50,11 +50,6 @@ export const upload = async (req, res, next) => {
   //     message: `Could not upload the file: ${req.file.originalname}. ${err}`,
   //   });
   // }
-
-
-
-
-
 };
 
 export const getListFiles = (req, res, next) => {

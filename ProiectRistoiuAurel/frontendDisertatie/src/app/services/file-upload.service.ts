@@ -49,11 +49,14 @@ export class FileUploadService {
   async uploadFile(file: File, currentAccount: string): Promise<any> {
     const formData: FormData = new FormData();
     formData.append('file', file);
+    console.log("THIS: ",currentAccount)
 
     const headers = new HttpHeaders({
       'fileName': file.name,
       'currentAccount': currentAccount
     });
+
+    console.log("HEADERS: ", headers)
   
     try {
       const response = await this.http.post<any>(`${this.baseUrl}/upload`, formData, {headers}).toPromise();

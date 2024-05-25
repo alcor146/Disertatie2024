@@ -5,8 +5,10 @@
   <div class="col-8">
     <label class="custom-file-upload">
       <input type="file" (change)="selectFile($event)" />
-      Custom Upload
+      Upload file
     </label>
+    <button *ngIf="currentAccount.toLowerCase() == admin.toLowerCase()" class="button create-button" mat-raised-button  color="primary" (click)="createAccount()">New account</button>
+    <button *ngIf="currentAccount.toLowerCase() == admin.toLowerCase()" class="button create-button" mat-raised-button  color="warn" (click)="deleteAccount()">Delete account</button>
   </div>
   
   
@@ -18,15 +20,29 @@
       <thead class="thead-dark">
           <tr>
             <th>Files</th>
-            <th>Buttons</th>
+            <th>Read</th>
+            <th>Edit</th>
           </tr>
       </thead>
       <tbody>
         <tr *ngFor="let file of fileInfos">
           <td>{{ file.name }}</td>
           <td>
+            <mat-form-field>
+              <mat-label>Select version</mat-label>
+              <mat-select [(ngModel)]="file.selectedTimestamp" (selectionChange)="onVersionChange(file)">
+                <mat-option *ngFor="let version of file.timestamps.reverse()" [value]="version">{{version}}</mat-option>
+              </mat-select>
+            </mat-form-field>
             <button class="button" mat-raised-button color="primary" (click)="download(file)">Download</button>
-            <button class="button" mat-raised-button color="warn" (click)="delete(file)">Delete</button>
+          </td>
+          <td>
+            <button *ngIf="currentAccount.toLowerCase() != admin.toLowerCase()" class="button" mat-raised-button [disabled]="file.owner.toLowerCase() != currentAccount.toLowerCase()" color="warn" (click)="delete(file)">Delete</button>
+            <button *ngIf="currentAccount.toLowerCase() != admin.toLowerCase()" class="button" mat-raised-button [disabled]="file.owner.toLowerCase() != currentAccount.toLowerCase()" color="primary" (click)="share(file)">Share access</button>
+            <button *ngIf="currentAccount.toLowerCase() != admin.toLowerCase()" class="button" mat-raised-button [disabled]="file.owner.toLowerCase() != currentAccount.toLowerCase()" color="primary" (click)="deny(file)">Deny access</button>
+            <button *ngIf="currentAccount.toLowerCase() == admin.toLowerCase()" class="button" mat-raised-button  color="warn" (click)="delete(file)">Delete</button>
+            <button *ngIf="currentAccount.toLowerCase() == admin.toLowerCase()" class="button" mat-raised-button  color="primary" (click)="share(file)">Share access</button>
+            <button *ngIf="currentAccount.toLowerCase() == admin.toLowerCase()" class="button" mat-raised-button  color="primary" (click)="deny(file)">Deny access</button>
           </td>
         </tr>
       </tbody>

@@ -1,0 +1,2 @@
+cd laborator
+./startNode.sh 

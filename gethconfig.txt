@@ -25,8 +25,9 @@ npx
 npx truffle migrate --network geth
 npx truffle console --network geth
 let fm = await FileManagement.deployed()
-fm.addFile("name2", ["asd", "asd", "asf"], "content")
-fm.getFileNames("0x568f2D6eB23cbF65D56cC004f9CDB26AEfbCf244")
+fm.addFile("name2", ["asd", "asd", "asf"], "content", "time")
+fm.shareAccessToFile("name2", "0xE2C17ef972951095173d2470d9CD34449F3D4B09")
+fm.getFileNames("0xE2C17ef972951095173d2470d9CD34449F3D4B09")
 fm.testContract()
 let test = await test.deployed()
 let SSS = await SSS.deployed()

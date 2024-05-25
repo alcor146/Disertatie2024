@@ -1,0 +1,2 @@
+cd Truffle
+./manual.sh 

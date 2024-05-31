@@ -465,3 +465,40 @@
 18:31:15.783109 table@remove removed @99
 18:31:15.783335 table@remove removed @100
 18:31:15.783390 table@remove removed @101
+=============== May 30, 2024 (EEST) ===============
+10:22:14.411373 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:22:14.413871 version@stat F·[0 5] S·9MiB[0B 9MiB] Sc·[0.00 0.10]
+10:22:14.413946 db@open opening
+10:22:14.414028 journal@recovery F·1
+10:22:14.418108 journal@recovery recovering @112
+10:22:14.451954 memdb@flush created L0@119 N·16171 S·914KiB "H\x00\x19..\x15\x02q,v684093":"unc..own,v675995"
+10:22:14.454125 version@stat F·[1 5] S·10MiB[914KiB 9MiB] Sc·[0.25 0.10]
+10:22:14.467203 db@janitor F·9 G·1
+10:22:14.467232 db@janitor removing table-111
+10:22:14.467298 db@open done T·53.343403ms
+10:22:23.353158 db@close closing
+10:22:23.353682 db@close done T·523.6µs
+=============== May 30, 2024 (EEST) ===============
+10:22:27.426907 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:22:27.427029 version@stat F·[1 5] S·10MiB[914KiB 9MiB] Sc·[0.25 0.10]
+10:22:27.427074 db@open opening
+10:22:27.427117 journal@recovery F·1
+10:22:27.428643 journal@recovery recovering @120
+10:22:27.434206 memdb@flush created L0@122 N·24 S·1KiB "Hv)..<:\x99,v692181":"unc..own,v692169"
+10:22:27.436244 version@stat F·[2 5] S·10MiB[915KiB 9MiB] Sc·[0.50 0.10]
+10:22:27.444186 db@janitor F·9 G·0
+10:22:27.444233 db@open done T·17.148403ms
+23:38:38.665446 db@close closing
+23:38:38.733335 db@close done T·69.0745ms
+=============== May 31, 2024 (EEST) ===============
+14:32:36.900842 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:32:36.907543 version@stat F·[2 5] S·10MiB[915KiB 9MiB] Sc·[0.50 0.10]
+14:32:36.908018 db@open opening
+14:32:36.908655 journal@recovery F·1
+14:32:36.993161 journal@recovery recovering @123
+14:32:37.580892 memdb@flush created L0@125 N·98191 S·4MiB "\x00\xec\xe7..J\xba\x1d,v790207":"\xffg\xfb..Z\x18\x0e,v790314"
+14:32:37.588968 version@stat F·[3 5] S·15MiB[5MiB 9MiB] Sc·[0.75 0.10]
+14:32:37.622011 db@janitor F·10 G·0
+14:32:37.623042 db@open done T·714.983249ms
+15:44:07.650343 db@close closing
+15:44:07.654388 db@close done T·4.0565ms

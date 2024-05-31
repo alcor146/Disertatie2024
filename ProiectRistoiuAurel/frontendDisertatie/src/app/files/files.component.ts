@@ -98,6 +98,7 @@ export class FilesComponent {
                     this.showAlert()
                   } else{
                     this.errorMessage = jsonDB.message
+                    this.accountExists = true
                     this.showAlert()
                   }
                 })

@@ -2,40 +2,46 @@
 
 <div class="container mt-5">
  
-  <div class="col-8">
-    <button *ngIf="currentAccount.toLowerCase() == admin.toLowerCase()" class="button create-button" mat-raised-button  color="primary" (click)="createAccount()">New account</button>
-  </div>
-
   <div class="alert" style="background: green" [class.visible]="isVisible" *ngIf="getPrivateKey"> 
     {{ privateKey}}
   </div>
-  <div class="alert" style="background: red" [class.visible]="isVisible" *ngIf="accountExists"> 
-    {{ privateKey}}
+
+  <div class="alert" [class.visible]="isVisible" *ngIf="accountExists" > 
+    {{ errorMessage }}
   </div>
 
-  <div class="container mt-5">
-    <table mat-table class="table table-striped">
-      <thead class="thead-dark">
-          <tr>
-            <th>Account</th>
-            <th>Address</th>
-            <th>Edit</th>
+  <div class = "lower">
+    <div class="col-8"  style="z-index: 2; position: absolute;">
+      <button *ngIf="currentAccount.toLowerCase() == admin.toLowerCase()" class="button specialButton" mat-raised-button  color="primary" (click)="createAccount()">New account</button>
+    </div>
+    
+  
+    <div class="container mt-5" style="z-index: 2; position: absolute;">
+      <table mat-table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+              <th>Account</th>
+              <th>Address</th>
+              <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let account of accountInfos">
+            <td>
+              {{account.name}}
+            </td>
+            <td>
+              {{account.accountAddress}}
+            </td>
+            <td>
+              <button class="button create-button" mat-raised-button  color="warn" (click)="deleteAccount(account)">Delete</button>
+            </td>
           </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let account of accountInfos">
-          <td>
-            {{account.name}}
-          </td>
-          <td>
-            {{account.accountAddress}}
-          </td>
-          <td>
-            <button class="button create-button" mat-raised-button  color="warn" (click)="deleteAccount(account)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
+
+  
 </div>
   

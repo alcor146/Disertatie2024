@@ -21,13 +21,13 @@ const contract = new web3.eth.Contract(
   CONTRACT_ADDRESS
 );
 
-const accounts = await web3.eth.getAccounts()
-console.log(accounts)
+// const accounts = await web3.eth.getAccounts()
+// console.log(accounts)
 
 
 
-let account = accounts[0];
-let files = await contract.methods.getFileNames().call({ from: account })
+// let account = accounts[0];
+let files = await contract.methods.getAccounts().call()
     console.log("files: ",files)
 
 

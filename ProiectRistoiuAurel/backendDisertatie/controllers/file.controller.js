@@ -1,7 +1,8 @@
 import { create } from 'ipfs-http-client';
 import secrets from 'secrets.js-grempe';
 import crypto from  'crypto';
-
+import fs from 'fs'
+import path from 'path';
 import Web3 from 'web3';
 import configuration from '../../../Truffle/build/contracts/FileManagement.json' assert { type: "json" };
 import multer from 'multer';
@@ -44,12 +45,6 @@ const gas = 2000000;  // Adjust gas limit
 const gasPrice = 1000000000;  // Adjust gas price (wei)
 let currentAccount = "0x568f2D6eB23cbF65D56cC004f9CDB26AEfbCf244"
 
-
-    
-  
-
-
-
     //console.log("Account: ", await contract.methods.getAccount("Admin").call())
 
 const initialize = async () => {
@@ -89,86 +84,6 @@ function getTimestamp () {
   
   return `${pad(d.getFullYear(),4)}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
-
-export const createAccount = async (req, res, next) => {
-
-  let accountName = req.body.body.account
-  console.log(req.body.body.account)
-  let currentAccount = req.body.body.currentAccount
-  console.log(req.body.body.currentAccount)
-
-  const newAccount = web3.eth.accounts.create();
-  console.log(newAccount)
-  console.log(newAccount.privateKey.toString('hex'))
-
-  const gas = 2000000;  // Adjust gas limit
-  const gasPrice = 1000000000;  // Adjust gas price (wei)
-  let account 
-  try {
-    account = await contract.methods.createAccount(accountName, newAccount.address, newAccount.privateKey)
-    .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
-    console.log(account)
-    let accountList =await contract.methods.getAccounts().call()
-    console.log(accountList)
-
-    res.status(200).json({success: true, message: 'Create Accounts Works!', key: newAccount.privateKey});
-} catch (error) {
-    console.log("ERROR: ", error.message)
-    let accountList =await contract.methods.getAccounts().call()
-    console.log(accountList)
-    res.status(200).json({success: false, message: 'Account already exists'});
-}
-
-
-  
-
-};
-
-export const deleteAccount = async (req, res, next) => {
-
-  let accountName = req.body.body.account
-  let currentAccount = req.body.body.currentAccount
-  console.log(accountName)
-  console.log(currentAccount)
-
-  const gas = 2000000;  // Adjust gas limit
-  const gasPrice = 1000000000;  // Adjust gas price (wei)
-   
-  try {
-    console.log(await contract.methods.deleteAccount(accountName)
-    .send({ from: currentAccount, gas: gas, gasPrice: gasPrice}));
-
-    res.status(200).json({success: true, message: `Delete Accounts Works ${accountName}!`});
-} catch (error) {
-    console.log("ERROR: ", error.message)
-    res.status(200).json({success: false, message: 'Account doesn t exists'});
-}
-
-// let accountList =await contract.methods.getAccounts().call()
-//     console.log(accountList)
-  
-};
-
-export const listAccounts = async (req, res, next) => {
-
-
-  let currentAccount = req.body.body.currentAccount
-
-  const gas = 2000000;  // Adjust gas limit
-  const gasPrice = 1000000000;  // Adjust gas price (wei)
-  let accounts 
-  try {
-    accounts = await contract.methods.getAccountsInfo().call()
-
-    res.status(200).json({success: true, message: 'Accounts List Works!', accounts});
-} catch (error) {
-    console.log("ERROR: ", error.message)
-    res.status(200).json({success: false, message: 'Account doesn t exists'});
-}
-
-
-  
-};
 
 export const upload = async (req, res, next) => {
 
@@ -263,42 +178,6 @@ export const deleteFile = async (req, res, next) => {
   res.status(200).json({success: true, message: 'Delete /File Works!'});
 };
 
-export const shareFile = async (req, res, next) => {
-  
-  let fileName = req.body.body.name;
-  let account = req.body.body.account.toLowerCase();
-  let currentAccount = req.body.body.currentAccount;
-  console.log("fileName: ", fileName);
-  console.log("account: ", account);
-  console.log("currentAccount: ", currentAccount);
-
-  const gas = 2000000;  // Adjust gas limit
-  const gasPrice = 1000000000;  // Adjust gas price (wei)
-
-  await contract.methods.shareAccessToFile(fileName, account)
-    .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
-
-  res.status(200).json({success: true, message: 'Share /File Works!'});
-};
-
-export const denyFile = async (req, res, next) => {
-  
-  let fileName = req.body.body.name;
-  let account = req.body.body.account.toLowerCase();
-  let currentAccount = req.body.body.currentAccount;
-  console.log("fileName: ", fileName);
-  console.log("account: ", account);
-  console.log("currentAccount: ", currentAccount);
-
-  const gas = 2000000;  // Adjust gas limit
-  const gasPrice = 1000000000;  // Adjust gas price (wei)
-
-  await contract.methods.revokeAccessToFile(fileName, account)
-    .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
-
-  res.status(200).json({success: true, message: 'Deny /File Works!'});
-};
-
 async function downloadShare(ipfs, hash) {
   try {
       const chunks = [];
@@ -369,3 +248,161 @@ export const download = async (req, res, next) => {
     }
 };
 
+export const shareFile = async (req, res, next) => {
+  
+  let fileName = req.body.body.name;
+  let account = req.body.body.account.toLowerCase();
+  let currentAccount = req.body.body.currentAccount;
+  console.log("fileName: ", fileName);
+  console.log("account: ", account);
+  console.log("currentAccount: ", currentAccount);
+
+  const gas = 2000000;  // Adjust gas limit
+  const gasPrice = 1000000000;  // Adjust gas price (wei)
+
+  await contract.methods.shareAccessToFile(fileName, account)
+    .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
+
+  res.status(200).json({success: true, message: 'Share /File Works!'});
+};
+
+export const denyFile = async (req, res, next) => {
+  
+  let fileName = req.body.body.name;
+  let account = req.body.body.account.toLowerCase();
+  let currentAccount = req.body.body.currentAccount;
+  console.log("fileName: ", fileName);
+  console.log("account: ", account);
+  console.log("currentAccount: ", currentAccount);
+
+  const gas = 2000000;  // Adjust gas limit
+  const gasPrice = 1000000000;  // Adjust gas price (wei)
+
+  await contract.methods.revokeAccessToFile(fileName, account)
+    .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
+
+  res.status(200).json({success: true, message: 'Deny /File Works!'});
+};
+
+//========================================================================================
+
+export const createAccount = async (req, res, next) => {
+
+  let accountName = req.body.body.account
+  console.log(req.body.body.account)
+  let currentAccount = req.body.body.currentAccount
+  console.log(req.body.body.currentAccount)
+
+  const newAccount = web3.eth.accounts.create();
+  console.log(newAccount)
+  console.log(newAccount.privateKey.toString('hex'))
+
+  const gas = 2000000;  // Adjust gas limit
+  const gasPrice = 1000000000;  // Adjust gas price (wei)
+  let account 
+  try {
+    account = await contract.methods.createAccount(accountName, newAccount.address, newAccount.privateKey)
+    .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
+    console.log(account)
+    let accountList =await contract.methods.getAccounts().call()
+    console.log(accountList)
+
+    res.status(200).json({success: true, message: 'Create Accounts Works!', key: newAccount.privateKey});
+} catch (error) {
+    console.log("ERROR: ", error.message)
+    let accountList =await contract.methods.getAccounts().call()
+    console.log(accountList)
+    res.status(200).json({success: false, message: 'Account already exists'});
+}
+
+
+  
+
+};
+
+export const deleteAccount = async (req, res, next) => {
+
+  let accountName = req.body.body.account
+  let currentAccount = req.body.body.currentAccount
+  console.log(accountName)
+  console.log(currentAccount)
+
+  const gas = 2000000;  // Adjust gas limit
+  const gasPrice = 1000000000;  // Adjust gas price (wei)
+   
+  try {
+    console.log(await contract.methods.deleteAccount(accountName)
+    .send({ from: currentAccount, gas: gas, gasPrice: gasPrice}));
+
+    res.status(200).json({success: true, message: `Delete Accounts Works ${accountName}!`});
+} catch (error) {
+    console.log("ERROR: ", error.message)
+    res.status(200).json({success: false, message: 'Account doesn t exists'});
+}
+
+// let accountList =await contract.methods.getAccounts().call()
+//     console.log(accountList)
+  
+};
+
+export const listAccounts = async (req, res, next) => {
+
+
+  let currentAccount = req.body.body.currentAccount
+
+  const gas = 2000000;  // Adjust gas limit
+  const gasPrice = 1000000000;  // Adjust gas price (wei)
+  let accounts 
+  try {
+    accounts = await contract.methods.getAccountsInfo().call()
+
+    res.status(200).json({success: true, message: 'Accounts List Works!', accounts});
+} catch (error) {
+    console.log("ERROR: ", error.message)
+    res.status(200).json({success: false, message: 'Account doesn t exists'});
+}
+  
+};
+
+//==========================================================================================
+
+export const uploadTest = async (req, res, next) => {
+  
+    const fileName = req.headers.filename; // Filename from headers
+    console.log("filename: ", fileName)
+    let account = req.headers.currentaccount
+    console.log("currentaccount: ", req.headers)
+
+    const currentDir = process.cwd();
+    const filePath = path.resolve(currentDir, 'files', fileName);
+    console.log("filePath: ", filePath)
+
+    const fileData = fs.readFileSync(filePath, 'base64');
+    console.log("FileData: ", fileData)
+    const HexData = Buffer.from(fileData, 'base64').toString('hex')
+    const shares = secrets.share(HexData, 3, 2); 
+    const ipfsHashes = [];
+    for (let i = 0; i < shares.length; i++) {
+        const response = await nodes[i].add(shares[i]);
+        const ipfsHash = response.cid.toString();
+        ipfsHashes.push(ipfsHash);
+        console.log(`Share ${i + 1} uploaded to IPFS with hash: ${ipfsHash}`);
+    }
+
+    let hash = getHash(fileData)
+    console.log("file: ", fileName)
+    console.log("IPFS:", ipfsHashes);
+    console.log("hash:",hash)
+
+    const gas = 2000000;  // Adjust gas limit
+    const gasPrice = 1000000000;  // Adjust gas price (wei)
+
+    let timestamp = getTimestamp();
+
+    let result = await contract.methods.addFile(fileName, ipfsHashes, hash, timestamp)
+                  .send({ from: account, gas: gas, gasPrice: gasPrice });
+
+    console.log('Transaction Hash:', result.transactionHash);
+
+  res.status(200).json({ success: true, message: 'File received successfully' });
+};

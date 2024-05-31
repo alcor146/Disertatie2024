@@ -7,8 +7,6 @@
       <input type="file" (change)="selectFile($event)" />
       Upload file
     </label>
-    <button *ngIf="currentAccount.toLowerCase() == admin.toLowerCase()" class="button create-button" mat-raised-button  color="primary" (click)="createAccount()">New account</button>
-    <button *ngIf="currentAccount.toLowerCase() == admin.toLowerCase()" class="button create-button" mat-raised-button  color="warn" (click)="deleteAccount()">Delete account</button>
   </div>
   
   

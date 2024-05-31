@@ -26,7 +26,7 @@ contract FileManagement {
     string [] private accountNames;
 
 
-    function getFileNames(address account) public view returns (string[] memory) {
+    function getFileNames() public view returns (string[] memory) {
          uint256 fileCount = files.length;
 
         // Temporary array to store filtered file names
@@ -35,7 +35,7 @@ contract FileManagement {
 
         for (uint256 i = 0; i < fileCount; i++) {
             // Check if the file belongs to the specified owner
-            if (ownerFileIndexes[account][files[i].name] > 0) {
+            if (ownerFileIndexes[msg.sender][files[i].name] > 0) {
                 ownerFiles[ownerFileCount] = files[i].name;
                 ownerFileCount++;
             }
@@ -115,7 +115,7 @@ contract FileManagement {
 
     function shareAccessToFile(string memory name, address account) public{
         uint index = ownerFileIndexes[msg.sender][name];
-        require(index > 0, "File doesn't exist");
+        require(index > 0, "File doesn't exist or account has no access to it");
         require(files[index - 1].owner == msg.sender, "Only the owner can share a file");
         ownerFileIndexes[account][name] = ownerFileIndexes[msg.sender][name];
     }
@@ -194,8 +194,6 @@ contract FileManagement {
             }
                 
         }
-
-
     }
 
     function getAccounts() public view returns (string[] memory accountsList) {

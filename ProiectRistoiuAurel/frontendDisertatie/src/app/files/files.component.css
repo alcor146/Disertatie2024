@@ -21,3 +21,57 @@ table {
 button {
     margin-left: 10px;
 }
+
+.specialButton {
+    margin-top: -40px;
+}
+
+.alert {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: auto;
+    top: 6rem;
+    width: 750px;
+    margin: auto;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.25rem;
+    padding: 1.2rem;
+    background: red;
+    color: #fff;
+    font-size: large;
+    font-weight: 700;
+    box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.5);
+    /* opacity: 0; */
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+    pointer-events: none; /* Prevents the alert from blocking interactions with other elements */
+}
+
+.visible {
+    animation: fadeInOut 7s forwards; /* 3s visible + 4s fade out */
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        top: 0.5rem;
+    }
+    20% {
+        opacity: 1;
+        top: 2rem;
+    }
+    80% {
+        opacity: 1;
+        top: 2rem;
+    }
+    100% {
+        opacity: 0;
+        top: 0.5rem;
+    }
+}
+
+.lower {
+    margin-top: 120px;
+}

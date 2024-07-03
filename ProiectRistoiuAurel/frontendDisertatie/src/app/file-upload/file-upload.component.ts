@@ -25,6 +25,14 @@ export class FileUploadComponent implements OnInit  {
   currentVersion: string = '';
   admin = '0x568f2D6eB23cbF65D56cC004f9CDB26AEfbCf244'
 
+  public isVisible: boolean = false;
+  shareFile: boolean = false;
+  denyFile: boolean = false;
+  deleteFile: boolean = false;
+  shareFileMessage: string = "Shared access to file";
+  denyFileMessage: string = "Denied access to file";
+  deleteFileMessage: string = "File deleted";
+
   constructor(private uploadService: FileUploadService, private http: HttpClient, private metamaskService: MetamaskService, private dialogService: DialogServiceShareFileService) { }
 
   onVersionChange(record: any) {
@@ -32,6 +40,23 @@ export class FileUploadComponent implements OnInit  {
     this.currentVersion = record.selectedTimestamp;
     console.log("new version: ", this.currentVersion)
     // Do something when the version changes
+  }
+
+  showAlert() : void {
+    if (this.isVisible) { // if the alert is visible return
+      return;
+    } 
+    this.isVisible = true;
+    setTimeout(()=> {
+      this.isVisible = false
+      if(this.shareFile == true)
+        this.shareFile = false
+      else if(this.denyFile == true)
+        this.denyFile = false;
+      else if(this.deleteFile == true)
+        this.deleteFile = false;
+      
+    },6000); // hide the alert after 2.5s
   }
 
   ngOnInit(): void {
@@ -45,6 +70,7 @@ export class FileUploadComponent implements OnInit  {
         const headers =  {
           'currentAccount': this.currentAccount
         };
+        console.log("this.currentAccount: ", this.currentAccount)
         this.http.get('http://localhost:3001/api/files', {headers})
           .subscribe(async (res: any) => {
             //console.log("res: ", res)
@@ -55,50 +81,6 @@ export class FileUploadComponent implements OnInit  {
             console.log("acc: ", this.currentAccount)
           })
       })
-  }
-
-  createAccount() {
-    
-    this.dialogService.shareDialog({
-      account : "",
-      confirmText: "Create"
-    }).subscribe( ( result ) => {  
-        console.log(result)
-        let newAccount = JSON.parse(JSON.stringify(result))
-        if(newAccount.confirmText.toString() == "Create"){   
-              console.log("account created");
-              let body = {
-                account : newAccount.account,
-                currentAccount: this.currentAccount
-              }
-              this.http.post(`${this.baseUrl}/accounts/create`, {body})
-                .subscribe((res ) => {
-                  console.log("res2: ", res)
-                })
-        };
-    });
-  }
-
-  deleteAccount() {
-    
-    this.dialogService.shareDialog({
-      account : "",
-      confirmText: "Delete"
-    }).subscribe( ( result ) => {  
-        console.log(result)
-        let newAccount = JSON.parse(JSON.stringify(result))
-        if(newAccount.confirmText.toString() == "Delete"){   
-              console.log("account deleted");
-              let body = {
-                account : newAccount.account,
-                currentAccount: this.currentAccount
-              }
-              this.http.post(`${this.baseUrl}/accounts/delete`, {body})
-                .subscribe((res ) => {
-                  console.log("res2: ", res)
-                })
-        };
-    });
   }
 
 
@@ -149,6 +131,8 @@ export class FileUploadComponent implements OnInit  {
       .subscribe((res ) => {
         console.log("res2: ", res)
         this.showFiles()
+        this.deleteFile = true
+        this.showAlert()
       })
   }
 
@@ -170,6 +154,8 @@ export class FileUploadComponent implements OnInit  {
               this.http.post(`${this.baseUrl}/documents/share`, {body})
                 .subscribe((res ) => {
                   console.log("res2: ", res)
+                  this.shareFile = true
+                  this.showAlert()
                 })
         };
     });
@@ -193,6 +179,8 @@ export class FileUploadComponent implements OnInit  {
               this.http.post(`${this.baseUrl}/documents/deny`, {body})
                 .subscribe((res ) => {
                   console.log("res2: ", res)
+                  this.denyFile = true
+                  this.showAlert()
                 })
         };
     });

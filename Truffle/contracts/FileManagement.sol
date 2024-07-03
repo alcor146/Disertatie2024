@@ -6,7 +6,7 @@ contract FileManagement {
 
     struct File {
         string name;
-        string[][] fileIpfsHashes; // Matrix to store three IPFS hashes for each version
+        string[][] fileIpfsHashes; 
         string[] hashes;
         address owner;
         string[] timestamps;
@@ -15,7 +15,6 @@ contract FileManagement {
     struct Account{
         string name;
         address accountAddress;
-        string privateKey;
         bool exists;
     }
     
@@ -25,23 +24,26 @@ contract FileManagement {
     mapping(string => Account) private accounts;
     string [] private accountNames;
 
+    constructor() {
+        accounts["Admin"] = Account("Admin", 0x568f2D6eB23cbF65D56cC004f9CDB26AEfbCf244, true);
+        accountNames.push("Admin");
+    }
+    
+
 
     function getFileNames() public view returns (string[] memory) {
          uint256 fileCount = files.length;
 
-        // Temporary array to store filtered file names
         string[] memory ownerFiles = new string[](fileCount);
         uint256 ownerFileCount = 0;
 
         for (uint256 i = 0; i < fileCount; i++) {
-            // Check if the file belongs to the specified owner
             if (ownerFileIndexes[msg.sender][files[i].name] > 0) {
                 ownerFiles[ownerFileCount] = files[i].name;
                 ownerFileCount++;
             }
         }
 
-        // Create a new array with the correct size to store only the owner's files
         string[] memory result = new string[](ownerFileCount);
         for (uint256 j = 0; j < ownerFileCount; j++) {
             result[j] = ownerFiles[j];
@@ -133,41 +135,18 @@ contract FileManagement {
         require(files[index - 1].owner == msg.sender, "Only the owner can delete a file");
         
         ownerFileIndexes[msg.sender][name] = 0;
-        files[index - 1].fileIpfsHashes = new string[3][](0);  
-        files[index - 1].hashes = new string[](0);
-        files[index - 1].name = new string(0);            
+        delete files[index - 1];       
     }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    function createAccount(string memory name, address accountAddress, string memory privateKey) public returns (Account memory newAccount){
+    function createAccount(string memory name, address accountAddress) public returns (Account memory newAccount){
         Account memory existingAccount = accounts[name];
         require(existingAccount.exists == false, "Account already exists");
-        // require(msg.sender == accounts["Admin"].accountAddress, "Only admins can modify accounts");
+        require(msg.sender == accounts["Admin"].accountAddress, "Only admins can modify accounts");
 
-        Account memory account = Account(name, accountAddress, privateKey, true);
+        Account memory account = Account(name, accountAddress, true);
         accounts[name] = account;
         accountNames.push(name);
 
@@ -176,8 +155,7 @@ contract FileManagement {
 
     function deleteAccount(string memory name) public {
         
-        // require(msg.sender == accounts["Admin"].accountAddress, "Only admins can modify accounts");
-        // require(keccak256(bytes(name)) != keccak256(bytes("Admin")), "Can t delete Admin");
+        require(msg.sender == accounts["Admin"].accountAddress, "Only admins can modify accounts");
         Account memory existingAccount = accounts[name];
         require(existingAccount.exists == true, "Account doesn t exists");
 
@@ -188,8 +166,9 @@ contract FileManagement {
                 for(uint j = i; j<accountNames.length-1; j++){
                     accountNames[j] = accountNames[j+1];
                     //console.log("here %s, %s", accountNames[j], accountNames[j+1]);
-                    delete accounts[name];
+                    
                 }
+                delete accounts[name];
                 accountNames.pop();
             }
                 
@@ -207,7 +186,7 @@ contract FileManagement {
     }
 
     function getAccountsInfo() public view returns (Account[] memory accountsList) {
-        //require(msg.sender != accounts["Admin"].accountAddress, "Only admin can access it");
+        require(msg.sender != accounts["Admin"].accountAddress, "Only admin can access it");
         uint accountsCount = accountNames.length;
         Account[] memory tempAccounts = new Account[](accountsCount);
         for(uint i=0; i<accountsCount; i++){

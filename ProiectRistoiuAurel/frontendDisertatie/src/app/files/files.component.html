@@ -3,10 +3,10 @@
 <div class="container mt-5">
  
   <div class="alert" style="background: green" [class.visible]="isVisible" *ngIf="getPrivateKey"> 
-    {{ privateKey}}
+      {{ privateKey}}
   </div>
 
-  <div class="alert" [class.visible]="isVisible" *ngIf="accountExists" > 
+  <div class="alert" style="width: 250px" [class.visible]="isVisible" *ngIf="accountExists" > 
     {{ errorMessage }}
   </div>
 
@@ -34,7 +34,7 @@
               {{account.accountAddress}}
             </td>
             <td>
-              <button class="button create-button" mat-raised-button  color="warn" (click)="deleteAccount(account)">Delete</button>
+              <button [disabled] = "currentAccount.toLowerCase() != admin.toLowerCase()" class="button create-button" mat-raised-button  color="warn" (click)="deleteAccount(account)">Delete</button>
             </td>
           </tr>
         </tbody>

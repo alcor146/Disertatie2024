@@ -32,12 +32,12 @@ button {
     left: 50%;
     transform: translateX(-50%);
     margin: auto;
-    top: 6rem;
+    top: 8rem;
     width: 750px;
     margin: auto;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.25rem;
-    padding: 1.2rem;
+    padding: 0.5rem;
     background: red;
     color: #fff;
     font-size: large;
@@ -46,8 +46,8 @@ button {
     /* opacity: 0; */
     text-align: center;
     transition: all 0.5s ease-in-out;
-    pointer-events: none; /* Prevents the alert from blocking interactions with other elements */
 }
+/*  0x2b0e7e258c0d4feea64a9c5f260b6d1c5acaee62ab9f33c9b5a4038045e240c9 */
 
 .visible {
     animation: fadeInOut 7s forwards; /* 3s visible + 4s fade out */

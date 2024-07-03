@@ -1,5 +1,6 @@
 import { create } from 'ipfs-http-client';
 import secrets from 'secrets.js-grempe';
+
 import crypto from  'crypto';
 import fs from 'fs'
 import path from 'path';
@@ -55,9 +56,9 @@ const initialize = async () => {
     let account2 = await contract.methods.createAccount("Aurel Ristoiu", "0x510F0A55f962EB67dAa8a20553fa897157466f9F", "key2")
     .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
     console.log("created account2: ", account2)
-    let account3 = await contract.methods.createAccount("George Ristoiu", "0xE2C17ef972951095173d2470d9CD34449F3D4B09", "key3")
-    .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
-    console.log("created account3: ", account3)
+    // let account3 = await contract.methods.createAccount("George Ristoiu", "0xE2C17ef972951095173d2470d9CD34449F3D4B09", "key3")
+    // .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
+    // console.log("created account3: ", account3)
 
     let accountList =await contract.methods.getAccounts().call()
     console.log(accountList)
@@ -125,7 +126,7 @@ export const upload = async (req, res, next) => {
 
     console.log('Transaction Hash:', result.transactionHash);
 
-  res.json({ message: 'File received successfully' });
+  res.status(200).json({ message: 'File received successfully' });
    });
 };
 
@@ -136,14 +137,8 @@ export const getListFiles = async (req, res, next) => {
     let account = req.headers.currentaccount
     console.log("account: ", account)
     let files;
-    if(account == "0x568f2d6eb23cbf65d56cc004f9cdb26aefbcf244") {
-      files = await contract.methods.getAllFiles().call({ from: account })
-      console.log("files1: ",files)
-    }
-    else {
-      files = await contract.methods.getFiles().call({ from: account })
-      console.log("files2: ",files)
-    }
+    files = await contract.methods.getFiles().call({ from: account })
+    console.log("files2: ",files)
      
 
     files.forEach((file) => {
@@ -172,10 +167,15 @@ export const deleteFile = async (req, res, next) => {
   const gas = 2000000;  // Adjust gas limit
   const gasPrice = 1000000000;  // Adjust gas price (wei)
 
-  await contract.methods.removeFile(fileName)
+  try{
+    await contract.methods.removeFile(fileName)
     .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
 
-  res.status(200).json({success: true, message: 'Delete /File Works!'});
+    res.status(200).json({success: true, message: 'Delete /File Works!'});
+  } catch (error){
+    res.status(201).json({success: false, message: error.message});
+  }
+ 
 };
 
 async function downloadShare(ipfs, hash) {
@@ -199,8 +199,13 @@ export const download = async (req, res, next) => {
   console.log("currentaccount: ", account)
   console.log("currentversion: ", timestamp)
 
-
-  let file = await contract.methods.getFile(fileName).call({ from: account })
+  let file;
+  try{
+    file = await contract.methods.getFile(fileName).call({ from: account })
+  }catch(error) {
+    res.status(401)
+  }
+  
 
   let ipfsHashes;
 
@@ -249,7 +254,7 @@ export const download = async (req, res, next) => {
 };
 
 export const shareFile = async (req, res, next) => {
-  
+  console.log("shareFile: ", "HERE")
   let fileName = req.body.body.name;
   let account = req.body.body.account.toLowerCase();
   let currentAccount = req.body.body.currentAccount;
@@ -260,10 +265,18 @@ export const shareFile = async (req, res, next) => {
   const gas = 2000000;  // Adjust gas limit
   const gasPrice = 1000000000;  // Adjust gas price (wei)
 
-  await contract.methods.shareAccessToFile(fileName, account)
+  try{
+    await contract.methods.shareAccessToFile(fileName, account)
     .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
+    res.status(200).json({success: true, message: 'Share /File Works!'});
+  }catch(error){
+    console.log("ERROR: ",error);
+    res.status(201).json({success: false, message: 'Share /File doesn t Work!'});
+    
+  }
+  
 
-  res.status(200).json({success: true, message: 'Share /File Works!'});
+  
 };
 
 export const denyFile = async (req, res, next) => {
@@ -278,10 +291,17 @@ export const denyFile = async (req, res, next) => {
   const gas = 2000000;  // Adjust gas limit
   const gasPrice = 1000000000;  // Adjust gas price (wei)
 
-  await contract.methods.revokeAccessToFile(fileName, account)
+  try{
+    await contract.methods.revokeAccessToFile(fileName, account)
     .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
+    res.status(200).json({success: true, message: 'Deny /File Works!'});
+  }catch (error){
+    console.log(error)
+    res.status(201).json({success: false, message: 'File Doesn t exist!'});
+  }
+  
 
-  res.status(200).json({success: true, message: 'Deny /File Works!'});
+  
 };
 
 //========================================================================================
@@ -301,7 +321,7 @@ export const createAccount = async (req, res, next) => {
   const gasPrice = 1000000000;  // Adjust gas price (wei)
   let account 
   try {
-    account = await contract.methods.createAccount(accountName, newAccount.address, newAccount.privateKey)
+    account = await contract.methods.createAccount(accountName, newAccount.address)
     .send({ from: currentAccount, gas: gas, gasPrice: gasPrice });
     console.log(account)
     let accountList =await contract.methods.getAccounts().call()
@@ -369,40 +389,125 @@ export const listAccounts = async (req, res, next) => {
 export const uploadTest = async (req, res, next) => {
   
     const fileName = req.headers.filename; // Filename from headers
-    console.log("filename: ", fileName)
     let account = req.headers.currentaccount
-    console.log("currentaccount: ", req.headers)
+    // console.log("filename upload: ", fileName)
+    // console.log("currentaccount: ", req.headers)
+    if(fileName == "" || fileName == undefined)
+      res.status(201).json({success: false, message: 'File has no name'});
+    else{
+      const currentDir = process.cwd();
+      const filePath = path.resolve(currentDir, 'files', fileName);
+      let start = Date.now();
+      const fileStream = fs.createReadStream(filePath);
 
-    const currentDir = process.cwd();
-    const filePath = path.resolve(currentDir, 'files', fileName);
-    console.log("filePath: ", filePath)
+        let fileData = '';
+        for await (const chunk of fileStream) {
+            fileData += chunk;
+        }
 
-    const fileData = fs.readFileSync(filePath, 'base64');
-    console.log("FileData: ", fileData)
-    const HexData = Buffer.from(fileData, 'base64').toString('hex')
-    const shares = secrets.share(HexData, 3, 2); 
-    const ipfsHashes = [];
-    for (let i = 0; i < shares.length; i++) {
-        const response = await nodes[i].add(shares[i]);
-        const ipfsHash = response.cid.toString();
-        ipfsHashes.push(ipfsHash);
-        console.log(`Share ${i + 1} uploaded to IPFS with hash: ${ipfsHash}`);
+        let timeTaken = Date.now() - start;
+        console.log("Total time taken : " + timeTaken+ " milliseconds");
+      //const fileData = fs.readFileSync(filePath, 'base64');
+    
+      const HexData = Buffer.from(fileData).toString('hex')
+      timeTaken = Date.now() - start;
+      console.log("Total time taken : " + timeTaken+ " milliseconds");
+      const shares = secrets.share(HexData, 3, 2); 
+      const ipfsHashes = [];
+      timeTaken = Date.now() - start;
+        console.log("Total time taken reconstructing: " + timeTaken+ " milliseconds");
+      for (let i = 0; i < shares.length; i++) {
+          const response = await nodes[i].add(shares[i]);
+          const ipfsHash = response.cid.toString();
+          ipfsHashes.push(ipfsHash);
+          // console.log(`Share ${i + 1} uploaded to IPFS with hash: ${ipfsHash}`);
+      }
+
+      let hash = getHash(fileData)
+      // console.log("file: ", fileName)
+      // console.log("IPFS:", ipfsHashes);
+      // console.log("hash:",hash)
+
+      const gas = 2000000;  // Adjust gas limit
+      const gasPrice = 1000000000;  // Adjust gas price (wei)
+
+      let timestamp = getTimestamp();
+       timeTaken = Date.now() - start;
+        console.log("Total time taken : " + timeTaken+ " milliseconds");
+      let result = await contract.methods.addFile(fileName, ipfsHashes, hash, timestamp)
+                    .send({ from: account, gas: gas, gasPrice: gasPrice });
+       timeTaken = Date.now() - start;
+      console.log("Total time taken : " + timeTaken+ " milliseconds");
+    
+
+    res.status(200).json({ success: true, message: 'File received successfully' });
     }
 
-    let hash = getHash(fileData)
-    console.log("file: ", fileName)
-    console.log("IPFS:", ipfsHashes);
-    console.log("hash:",hash)
+    
+};
 
-    const gas = 2000000;  // Adjust gas limit
-    const gasPrice = 1000000000;  // Adjust gas price (wei)
+export const downloadTest = async (req, res, next) => {
+  const fileName = req.params.name;
+  let account = req.headers.currentaccount
+  // console.log("currentaccountDownload: ", account)
 
-    let timestamp = getTimestamp();
+  let file;
+  try{
+    file = await contract.methods.getFile(fileName).call({ from: account })
 
-    let result = await contract.methods.addFile(fileName, ipfsHashes, hash, timestamp)
-                  .send({ from: account, gas: gas, gasPrice: gasPrice });
+    let ipfsHashes = file.fileIpfsHashes[0];
 
-    console.log('Transaction Hash:', result.transactionHash);
 
-  res.status(200).json({ success: true, message: 'File received successfully' });
+
+  let start = Date.now();
+  const shares = [];
+
+    for (let i=0; i<nodes.length; i++){
+      const share = await downloadShare(nodes[i], ipfsHashes[i]);
+      shares.push(share);
+    }
+
+    let timeTaken = Date.now() - start;
+      console.log("Total time taken : " + timeTaken+ " milliseconds");
+       
+    if (shares.length >= 2) {
+        const reconstructedHex4 = secrets.combine(shares); // Reconstruct the base64 encoded content
+        timeTaken = Date.now() - start;
+      console.log("Total time taken reconstructing : " + timeTaken+ " milliseconds");
+        const reconstructedData = Buffer.from(reconstructedHex4, 'hex');
+        timeTaken = Date.now() - start;
+      console.log("Total time taken : " + timeTaken+ " milliseconds");
+        let hash = getHash(reconstructedData)
+        // if(hash != file.hashes[file.hashes.length-1])
+        //   console.log("File Integrity compromised");
+        // else
+        //   console.log("File is secure");
+        
+        // console.log("original hash: ", file.hashes[file.hashes.length-1])  
+        // console.log("hash: ", hash)
+        
+        try {
+          // Set the appropriate headers for the file download
+          res.setHeader('Content-Type', 'application/octet-stream');
+          res.setHeader('Content-Disposition', 'attachment; filename="downloadedFile.txt"');
+      
+          // Send the buffer data as the response
+          res.send(reconstructedData);
+        } catch (error) {
+          console.error('Error handling download:', error);
+          res.status(500).json({ error: 'Internal server error' });
+        }
+        console.log(`DOCX document successfully reconstructed and saved to Downloads folder `);
+    } else {
+        console.error('Insufficient shares for reconstruction.');
+        res.status(401)
+    }
+    
+  }catch(error) {
+    console.log(error.message)
+    res.status(201).json({ success: false, message: 'File doesn t exist' })
+  }
+  
+
+  
 };

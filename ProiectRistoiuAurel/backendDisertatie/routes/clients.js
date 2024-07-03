@@ -1,7 +1,7 @@
 import express from "express";
 export const router = express.Router();
 
-import  {upload, getListFiles, download, deleteFile, shareFile, denyFile, createAccount, deleteAccount, listAccounts, uploadTest} from  "../controllers/file.controller.js";
+import  {upload, getListFiles, download, deleteFile, shareFile, denyFile, createAccount, deleteAccount, listAccounts, uploadTest, downloadTest} from  "../controllers/file.controller.js";
 
 
 
@@ -16,5 +16,6 @@ router.route("/accounts/delete").post(deleteAccount);
 router.route("/accounts/list").post(listAccounts);
 
 router.route("/upload/test").post(uploadTest);
+router.route("/download/test/:name").post(downloadTest);
 
 

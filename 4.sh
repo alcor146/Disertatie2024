@@ -1,1 +1,1 @@
-sudo IPFS_PATH=config ipfs daemon --repo-dir Ipfs/node1
+sudo -S <<< "123" IPFS_PATH=config ipfs daemon --repo-dir Ipfs/node1 
